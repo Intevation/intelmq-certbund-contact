@@ -1,0 +1,26 @@
+{
+    "Expert": {
+        "CERT-bund Contact Database": {
+            "description": "Retrieve contact information from a PostgreSQL database.",
+            "module": "intelmq_certbund_contact.expert",
+            "parameters": {
+                "database": "contactdb",
+                "host": "localhost",
+                "password": "<password>",
+                "port": "5432",
+                "sections": "source",
+                "sslmode": "require",
+                "user": "intelmq"
+            }
+        },
+        "CERT-bund Contact Rules": {
+            "description": "Determine how and whom to notify about the event.",
+            "module": "intelmq_certbund_contact.ruleexpert",
+            "parameters": {
+                "script_directory": "/opt/intelmq/var/lib/bots/notification_rules",
+                "sections": "source",
+                "remove_contact_data": true
+            }
+        }
+    }
+}
