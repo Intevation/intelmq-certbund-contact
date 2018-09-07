@@ -33,5 +33,6 @@ setup(
     description=('IntelMQ Contacts is a contact database for IntelMQ'
                  ' with related expert bots'),
     entry_points={'console_scripts': BOTS + ENTRY_POINTS},
-    scripts=["bin/ripe_download"],
+    scripts=["bin/ripe_download",
+             "bin/import-national-certs"],
 )
