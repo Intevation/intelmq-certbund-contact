@@ -17,6 +17,11 @@ for bot_type, bots in bots.items():
         module = bot['module']
         BOTS.append('{0} = {0}:BOT.run'.format(module))
 
+ENTRY_POINTS = [
+    "ripe_import = intelmq_certbund_contact.ripe.ripe_import:main",
+    "ripe_diff = intelmq_certbund_contact.ripe.ripe_diff:main",
+]
+
 setup(
     name='intelmq_certbund_contact',
     version="0.1",
@@ -27,5 +32,5 @@ setup(
     packages=find_packages("."),
     description=('IntelMQ Contacts is a contact database for IntelMQ'
                  ' with related expert bots'),
-    entry_points={'console_scripts': BOTS},
+    entry_points={'console_scripts': BOTS + ENTRY_POINTS},
 )
