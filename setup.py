@@ -7,7 +7,7 @@ import sys
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    'intelmq>=1.1.0rc2',
+    'intelmq>=1.1.0',
 ]
 
 BOTS = []
