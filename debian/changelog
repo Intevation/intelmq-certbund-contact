@@ -1,3 +1,9 @@
+intelmq-certbund-contact (0.9.2) unstable; urgency=medium
+
+  * Added more scripts and examples.
+
+ -- Sascha Wilde <wilde@intevation.de>  Wed, 12 Sep 2018 15:51:57 +0200
+
 intelmq-certbund-contact (0.9.1) unstable; urgency=medium
 
   * Added automatic handling of /etc/intelmq/BOTS to packaging.
