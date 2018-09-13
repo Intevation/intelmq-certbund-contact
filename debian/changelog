@@ -1,3 +1,9 @@
+intelmq-certbund-contact (0.9.3) unstable; urgency=medium
+
+  * Speedup inet address operations by using pg 9.4 indexes.
+
+ -- Sascha Wilde <wilde@intevation.de>  Thu, 13 Sep 2018 16:01:46 +0200
+
 intelmq-certbund-contact (0.9.2) unstable; urgency=medium
 
   * Added more scripts and examples.

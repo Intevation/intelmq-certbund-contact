@@ -1,7 +1,7 @@
 BEGIN;
 
 /*
- Template table containing with elements for automatic tables 
+ Template table containing with elements for automatic tables
  */
 CREATE TEMP TABLE automatic_templ (
     import_source VARCHAR(500) NOT NULL CHECK (import_source <> ''),
@@ -189,6 +189,8 @@ CREATE INDEX network_automatic_cidr_lower_idx
 CREATE INDEX network_automatic_cidr_upper_idx
           ON network_automatic ((inet(host(broadcast(address)))));
 
+CREATE INDEX network_automatic_cidr_gist_idx ON network_automatic
+       USING gist (address inet_ops);
 
 
 -- Annotations for networks
