@@ -133,7 +133,7 @@ def lookup_contacts(cur, managed, asn, ip, fqdn, country_code):
          matched_networks (network_id, address)
              AS (SELECT n.network{0}_id AS network_id, n.address AS address
                    FROM network{0} AS n
-                  WHERE %(ip)s << n.address),
+                  WHERE %(ip)s << n.address OR %(ip)s = n.address),
 
          -- all matched networks in a form useful for conversion to JSON
          network_json_rows (field, address, organisations, annotations, managed)
