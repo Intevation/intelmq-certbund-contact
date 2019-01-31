@@ -381,4 +381,17 @@ CREATE TABLE email_status (
 );
 
 
+-- annotations for email addresses. These apply to any email address,
+-- includes in particular email addresses of automatically maintained
+-- contacts.
+CREATE TABLE email_annotation (
+    email_annotation_id SERIAL PRIMARY KEY,
+    email VARCHAR(100),
+    annotation JSON NOT NULL
+);
+
+CREATE INDEX email_annotation_email_idx
+          ON email_annotation (email);
+
+
 COMMIT;
