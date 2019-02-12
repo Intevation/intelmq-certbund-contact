@@ -198,7 +198,13 @@ def lookup_contacts(cur, managed, asn, ip, fqdn, country_code):
                                                       THEN 'enabled'
                                                       ELSE 'disabled'
                                                       END)
-                                                      AS email_status
+                                                      AS email_status,
+                                                     COALESCE(
+                                                     (SELECT json_agg(annotation)
+                                                        FROM email_annotation ea
+                                                       WHERE ea.email = c.email),
+                                                      ('[]' :: JSON))
+                                                      AS annotation
                                               FROM contact{0} c
                                               LEFT OUTER JOIN email_status es
                                                 ON c.email = es.email
