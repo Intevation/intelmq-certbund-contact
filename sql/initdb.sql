@@ -381,17 +381,53 @@ CREATE TABLE email_status (
 );
 
 
--- annotations for email addresses. These apply to any email address,
--- includes in particular email addresses of automatically maintained
--- contacts.
-CREATE TABLE email_annotation (
-    email_annotation_id SERIAL PRIMARY KEY,
-    email VARCHAR(100),
-    annotation JSON NOT NULL
+-- Tags for email addresses. These apply to any email address, including
+-- in particular email addresses of automatically maintained contacts.
+--
+-- Tags are classified in categories, so there are two tables, category
+-- and tag, which define the allowed combinations. Which tags an email
+-- address has, is stored in email_tag.
+
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    category_name TEXT NOT NULL,
+
+    UNIQUE (category_name)
 );
 
-CREATE INDEX email_annotation_email_idx
-          ON email_annotation (email);
+CREATE TABLE tag (
+    tag_id SERIAL PRIMARY KEY,
+    category_id INTEGER NOT NULL,
+    tag_name TEXT NOT NULL,
+
+    UNIQUE (category_id, tag_name),
+    FOREIGN KEY (category_id) REFERENCES category (category_id)
+);
+
+
+CREATE TABLE email_tag (
+    email VARCHAR(100) NOT NULL,
+    tag_id INTEGER NOT NULL,
+
+    PRIMARY KEY (email, tag_id),
+
+    FOREIGN KEY (tag_id) REFERENCES tag (tag_id)
+);
+
+
+CREATE INDEX email_tag_email_idx
+          ON email_tag (email);
+
+
+-- View to present the tags as annotations so that the contact bot only
+-- has to deal with annotations.
+-- DROP VIEW email_tag_as_annotation;
+CREATE VIEW email_annotation (email, annotation)
+  AS SELECT email,
+            json_build_object('tag', category_name || ':' || tag_name)
+       FROM email_tag
+       JOIN tag USING (tag_id)
+       JOIN category USING (category_id);
 
 
 COMMIT;
