@@ -91,22 +91,29 @@ class Contact:
         email_status (str): Either 'enabled' or 'disabled'. 'disabled'
             usually means that the email address is likely invalid in
             some way, e.g. because emails sent there bounce.
+        annotations (list of Annotation): The annotations associated
+            with the contact.
     """
 
-    def __init__(self, email, managed, email_status="enabled"):
+    def __init__(self, email, managed, email_status="enabled",
+                 annotations=None):
         self.email = email
         self.managed = managed
         self.email_status = email_status
+        self.annotations = annotations if annotations is not None else []
 
     def __repr__(self):
-        return ("Contact(email=%r, managed=%r, email_status=%r)"
-                % (self.email, self.managed, self.email_status))
+        return ("Contact(email=%r, managed=%r, email_status=%r, annotations=%r)"
+                % (self.email, self.managed, self.email_status,
+                   self.annotations))
 
     @classmethod
     def from_json(cls, jsondict):
         return cls(email=jsondict["email"],
                    managed=jsondict["managed"],
-                   email_status=jsondict.get("email_status", "enabled"))
+                   email_status=jsondict.get("email_status", "enabled"),
+                   annotations=[annotations.from_json(a)
+                                for a in jsondict.get("annotations", ())])
 
 
 class Match:
@@ -483,7 +490,13 @@ class Context:
 
     def all_annotations(self):
         """Return an iterator over all annotations."""
-        for item in chain(self.organisations, self.matches):
+        for item in self.organisations:
+            for annotation in item.annotations:
+                yield annotation
+            for contact in item.contacts:
+                for annotation in contact.annotations:
+                    yield annotation
+        for item in self.matches:
             for annotation in item.annotations:
                 yield annotation
 
