@@ -204,7 +204,7 @@ def lookup_contacts(cur, managed, asn, ip, fqdn, country_code):
                                                         FROM email_annotation ea
                                                        WHERE ea.email = c.email),
                                                       ('[]' :: JSON))
-                                                      AS annotation
+                                                      AS annotations
                                               FROM contact{0} c
                                               LEFT OUTER JOIN email_status es
                                                 ON c.email = es.email
