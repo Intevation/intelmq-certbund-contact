@@ -399,6 +399,7 @@ CREATE TABLE tag (
     tag_id SERIAL PRIMARY KEY,
     category_id INTEGER NOT NULL,
     tag_name TEXT NOT NULL,
+    tag_description TEXT NOT NULL,
 
     UNIQUE (category_id, tag_name),
     FOREIGN KEY (category_id) REFERENCES category (category_id)
