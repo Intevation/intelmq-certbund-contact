@@ -400,10 +400,17 @@ CREATE TABLE tag (
     category_id INTEGER NOT NULL,
     tag_name TEXT NOT NULL,
     tag_description TEXT NOT NULL,
+    is_default BOOLEAN NOT NULL DEFAULT false,
 
     UNIQUE (category_id, tag_name),
     FOREIGN KEY (category_id) REFERENCES category (category_id)
 );
+
+-- Unique index to ensure that for each category, there's at most one
+-- tag marked as default.
+CREATE UNIQUE INDEX tag_unique_default_tags_idx
+    ON tag (category_id)
+ WHERE is_default;
 
 
 CREATE TABLE email_tag (
@@ -429,6 +436,45 @@ CREATE VIEW email_annotation (email, annotation)
        FROM email_tag
        JOIN tag USING (tag_id)
        JOIN category USING (category_id);
+
+
+CREATE OR REPLACE FUNCTION email_annotations(email_address VARCHAR(100))
+RETURNS JSON AS
+$$
+DECLARE
+    annotations JSON;
+BEGIN
+WITH
+  email_tags (category_id, annotation)
+    AS (SELECT category_id,
+               json_build_object('tag',
+                                 category.category_name || ':' || tag.tag_name)
+               AS annotation
+          FROM email_tag
+          JOIN tag USING (tag_id)
+          JOIN category USING (category_id)
+         WHERE email_tag.email = email_address),
+  default_tags (category_id, default_tag)
+    AS (SELECT category_id,
+               MIN(category.category_name || ':' || tag.tag_name)
+               FILTER (WHERE is_default)
+	       AS default_tag
+          FROM tag JOIN category USING (category_id)
+      GROUP BY category_id),
+  default_annotations (category_id, default_annotation)
+    AS (SELECT category_id,
+               CASE WHEN default_tag IS NULL THEN NULL
+	            ELSE json_build_object('tag', default_tag)
+	       END AS default_annotation
+         FROM default_tags)
+SELECT json_agg(COALESCE(annotation, default_annotation))
+       FILTER (WHERE COALESCE(annotation, default_annotation) IS NOT NULL)
+       INTO annotations
+  FROM email_tags RIGHT OUTER JOIN default_annotations USING (category_id);
+
+RETURN coalesce(annotations, '[]'::JSON);
+END;
+$$ LANGUAGE plpgsql STABLE;
 
 
 COMMIT;
