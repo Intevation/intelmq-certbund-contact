@@ -391,6 +391,7 @@ CREATE TABLE email_status (
 CREATE TABLE category (
     category_id SERIAL PRIMARY KEY,
     category_name TEXT NOT NULL,
+    category_order INTEGER NOT NULL,
 
     UNIQUE (category_name)
 );
