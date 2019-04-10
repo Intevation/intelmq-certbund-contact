@@ -393,13 +393,19 @@ def modify_for_abusec(obj_list_a,
     added_counter = 0
     for obj in obj_list_a:
         abuse_c = obj['abuse-c'][0].upper()
-        role = role_index[abuse_c]
+        role = role_index.get(abuse_c)
 
         new_org_id = abuse_c  # for clarity of following code
-        new_org_name = role.get('role')[0]
-        if new_org_name in ["Abuse", "Abuse-C Role",
-                            "Abuse contact role object"]:
-            new_org_name += " " + abuse_c
+        if role is not None:
+            new_org_name = role.get('role')[0]
+            if new_org_name in ["Abuse", "Abuse-C Role",
+                                "Abuse contact role object"]:
+                new_org_name += " " + abuse_c
+        else:
+            # there was no role for the abuse-c, therefore we don't know
+            # what name to use for a new organisation, so we invent one.
+            # Use of the generic ones above as basis.
+            new_org_name = "Abuse-C Role " + abuse_c
 
         if new_org_id not in organisation_index:
             new_org = collections.defaultdict(list)
