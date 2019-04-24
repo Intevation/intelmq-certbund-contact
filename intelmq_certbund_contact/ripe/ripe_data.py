@@ -391,9 +391,15 @@ def modify_for_abusec(obj_list_a,
         and updated org index
     """
     added_counter = 0
+    filtered_obj = []
     for obj in obj_list_a:
         abuse_c = obj['abuse-c'][0].upper()
-        role = role_index[abuse_c]
+        role = role_index.get(abuse_c)
+
+        if role is None:
+            print("    Omitting entry because there's no role entry for {}"
+                  .format(abuse_c))
+            continue
 
         new_org_id = abuse_c  # for clarity of following code
         new_org_name = role.get('role')[0]
@@ -417,8 +423,9 @@ def modify_for_abusec(obj_list_a,
             obj['org'][0] = new_org_id
         else:
             obj['org'].append(new_org_id)
+        filtered_obj.append(obj)
 
-    return obj_list_a, organisation_list, organisation_index
+    return filtered_obj, organisation_list, organisation_index
 
 
 def split_for_known_orgs(obj_list, organisation_index):
@@ -480,8 +487,13 @@ def sanitize_split_and_modify(obj_list, index, whitelist,
               .format(len(obj_list_u)))
         print("   -> for {} {} we use `abuse-c'".format(len(obj_list_a), index))
 
+    obj_list_a_len = len(obj_list_a)
     obj_list_a, organisation_list, organisation_index = modify_for_abusec(
         obj_list_a, organisation_list, organisation_index, role_index, verbose)
+
+    if len(obj_list_a) != obj_list_a_len:
+        print("   {} entries were removed because of missing role entries!"
+              .format(obj_list_a_len - len(obj_list_a)))
 
     return (obj_list_o + obj_list_a, obj_list_u + obj_list_n,
             organisation_list, organisation_index)
