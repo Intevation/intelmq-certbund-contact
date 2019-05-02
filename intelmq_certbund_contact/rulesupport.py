@@ -79,6 +79,18 @@ class Organisation:
                    annotations=[annotations.from_json(a)
                                 for a in jsondict["annotations"]])
 
+    def all_annotations(self):
+        """Return an iterator over all annotations of the organisation.
+
+        This includes the annotations associated with the organisation
+        itself and the annotations associated with the contacts.
+        """
+        for annotation in self.annotations:
+            yield annotation
+        for contact in self.contacts:
+            for annotation in contact.annotations:
+                yield annotation
+
 
 class Contact:
 
