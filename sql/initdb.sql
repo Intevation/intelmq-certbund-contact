@@ -459,14 +459,14 @@ WITH
     AS (SELECT category_id,
                MIN(category.category_name || ':' || tag.tag_name)
                FILTER (WHERE is_default)
-	       AS default_tag
+               AS default_tag
           FROM tag JOIN category USING (category_id)
       GROUP BY category_id),
   default_annotations (category_id, default_annotation)
     AS (SELECT category_id,
                CASE WHEN default_tag IS NULL THEN NULL
-	            ELSE json_build_object('tag', default_tag)
-	       END AS default_annotation
+                    ELSE json_build_object('tag', default_tag)
+               END AS default_annotation
          FROM default_tags)
 SELECT json_agg(COALESCE(annotation, default_annotation))
        FILTER (WHERE COALESCE(annotation, default_annotation) IS NOT NULL)
