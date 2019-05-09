@@ -383,34 +383,30 @@ CREATE TABLE email_status (
 
 -- Tags for email addresses. These apply to any email address, including
 -- in particular email addresses of automatically maintained contacts.
---
--- Tags are classified in categories, so there are two tables, category
--- and tag, which define the allowed combinations. Which tags an email
--- address has, is stored in email_tag.
 
-CREATE TABLE category (
-    category_id SERIAL PRIMARY KEY,
-    category_name TEXT NOT NULL,
-    category_order INTEGER NOT NULL,
+CREATE TABLE tag_name (
+    tag_name_id SERIAL PRIMARY KEY,
+    tag_name TEXT NOT NULL,
+    tag_name_order INTEGER NOT NULL,
 
-    UNIQUE (category_name)
+    UNIQUE (tag_name)
 );
 
 CREATE TABLE tag (
     tag_id SERIAL PRIMARY KEY,
-    category_id INTEGER NOT NULL,
-    tag_name TEXT NOT NULL,
+    tag_name_id INTEGER NOT NULL,
+    tag_value TEXT NOT NULL,
     tag_description TEXT NOT NULL,
     is_default BOOLEAN NOT NULL DEFAULT false,
 
-    UNIQUE (category_id, tag_name),
-    FOREIGN KEY (category_id) REFERENCES category (category_id)
+    UNIQUE (tag_name_id, tag_value),
+    FOREIGN KEY (tag_name_id) REFERENCES tag_name (tag_name_id)
 );
 
--- Unique index to ensure that for each category, there's at most one
+-- Unique index to ensure that for each tag_name, there's at most one
 -- tag marked as default.
 CREATE UNIQUE INDEX tag_unique_default_tags_idx
-    ON tag (category_id)
+    ON tag (tag_name_id)
  WHERE is_default;
 
 
@@ -433,10 +429,10 @@ CREATE INDEX email_tag_email_idx
 -- DROP VIEW email_tag_as_annotation;
 CREATE VIEW email_annotation (email, annotation)
   AS SELECT email,
-            json_build_object('tag', category_name || ':' || tag_name)
+            json_build_object('tag', tag_name || ':' || tag_name)
        FROM email_tag
        JOIN tag USING (tag_id)
-       JOIN category USING (category_id);
+       JOIN tag_name USING (tag_name_id);
 
 
 CREATE OR REPLACE FUNCTION email_annotations(email_address VARCHAR(100))
@@ -446,24 +442,24 @@ DECLARE
     annotations JSON;
 BEGIN
 WITH
-  email_tags (category_id, annotation)
-    AS (SELECT category_id,
+  email_tags (tag_name_id, annotation)
+    AS (SELECT tag_name_id,
                json_build_object('tag',
-                                 category.category_name || ':' || tag.tag_name)
+                                 tag_name.tag_name || ':' || tag.tag_value)
                AS annotation
           FROM email_tag
           JOIN tag USING (tag_id)
-          JOIN category USING (category_id)
+          JOIN tag_name USING (tag_name_id)
          WHERE email_tag.email = email_address),
-  default_tags (category_id, default_tag)
-    AS (SELECT category_id,
-               MIN(category.category_name || ':' || tag.tag_name)
+  default_tags (tag_name_id, default_tag)
+    AS (SELECT tag_name_id,
+               MIN(tag_name.tag_name || ':' || tag.tag_value)
                FILTER (WHERE is_default)
                AS default_tag
-          FROM tag JOIN category USING (category_id)
-      GROUP BY category_id),
-  default_annotations (category_id, default_annotation)
-    AS (SELECT category_id,
+          FROM tag JOIN tag_name USING (tag_name_id)
+      GROUP BY tag_name_id),
+  default_annotations (tag_name_id, default_annotation)
+    AS (SELECT tag_name_id,
                CASE WHEN default_tag IS NULL THEN NULL
                     ELSE json_build_object('tag', default_tag)
                END AS default_annotation
@@ -471,7 +467,7 @@ WITH
 SELECT json_agg(COALESCE(annotation, default_annotation))
        FILTER (WHERE COALESCE(annotation, default_annotation) IS NOT NULL)
        INTO annotations
-  FROM email_tags RIGHT OUTER JOIN default_annotations USING (category_id);
+  FROM email_tags RIGHT OUTER JOIN default_annotations USING (tag_name_id);
 
 RETURN coalesce(annotations, '[]'::JSON);
 END;
