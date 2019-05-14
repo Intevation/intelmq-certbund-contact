@@ -429,7 +429,7 @@ CREATE INDEX email_tag_email_idx
 -- DROP VIEW email_tag_as_annotation;
 CREATE VIEW email_annotation (email, annotation)
   AS SELECT email,
-            json_build_object('tag', tag_name || ':' || tag_name)
+            json_build_object('tag', tag_name || ':' || tag_value)
        FROM email_tag
        JOIN tag USING (tag_id)
        JOIN tag_name USING (tag_name_id);
