@@ -426,7 +426,6 @@ CREATE INDEX email_tag_email_idx
 
 -- View to present the tags as annotations so that the contact bot only
 -- has to deal with annotations.
--- DROP VIEW email_tag_as_annotation;
 CREATE VIEW email_annotation (email, annotation)
   AS SELECT email,
             json_build_object('tag', tag_name || ':' || tag_value)
