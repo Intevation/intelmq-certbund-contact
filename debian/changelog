@@ -1,3 +1,9 @@
+intelmq-certbund-contact (0.9.4) unstable; urgency=medium
+
+  * Added new email tags feature.
+
+ -- Sascha Wilde <wilde@intevation.de>  Wed, 15 May 2019 15:51:06 +0200
+
 intelmq-certbund-contact (0.9.3) unstable; urgency=medium
 
   * Speedup inet address operations by using pg 9.4 indexes.
