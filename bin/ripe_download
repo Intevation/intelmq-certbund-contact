@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 d=`date +%F`
 mkdir $d
 cd $d

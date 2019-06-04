@@ -24,7 +24,7 @@ AS entry per line, with the AS-prefix, e.g. ``AS123``.
 Usage
 =====
 
-Download data to a directory using the script `ripe_download`.
+Download data to a directory using the script `ripe_download`, the program `curl` is required for this.
 
 Call `ripe_import.py --help` or `ripe_diff.py --help`
 to see all command line options.
