@@ -1,4 +1,6 @@
-# Expert bot to lookup contact information in a simple database
+# Expert bot to lookup contact information in a database
+
+Part of the [intelmq-cb-mailgen solution](https://github.com/Intevation/intelmq-mailgen-release).
 
 ## Contact DB
 
