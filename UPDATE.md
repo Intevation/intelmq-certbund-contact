@@ -46,7 +46,7 @@ and actual tags like:
 
 The Version 0.9.3 of intelmq-certbund-contact relies on features of
 PostgreSQL 9.4 to accelerate operations on inet addresses.  Therefor
-an additional index must be creates in the database, this is done by
+an additional index must be created in the database, this is done by
 the provided update script:
 
 ```
