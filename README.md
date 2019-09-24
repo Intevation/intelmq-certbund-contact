@@ -54,7 +54,7 @@ the system that can be configured on the level of administration rights,
 but selected on the user level. The "simple" tags are designed to best be used
 to denote a group of properties for sending behaviour that can be combined.
 It is recommended to keep the numer of tags low.
-The tags have be tuned after gaining experience in production use
+The tags have to be tuned after gaining experience in production use
 and they will be easy to use if good tags are chosen over time.
 
 The `inhibition`-annotations expose a generic way to prevent
@@ -136,8 +136,11 @@ When upgrading to new version take a look at
 
 ### Adding New Contacts
 
-Contacts can be added to the database directly using SQL.  These
-manually configured contacts will take precedence over contacts which
+Contacts can be added to the database directly using SQL.
+Though most users are expected to use a frontend application like Fody.
+
+When put into the tables for manual contacts, the entries
+will take precedence over contacts which
 were imported automatically, i.e. by `ripe_import.py`.
 
 Connect to the database:
@@ -192,10 +195,10 @@ Add a contact:
 
 ```
 
-### Example change Tags
+### Example change tags
 
-If we call the simple text annotations tags, how could be change a tag
-that has already be used.
+If we call the simple text annotations tags, how could we change a tag
+that has already be used?
 
 Of course the notification rules may have to be changed
 (see mailgen documentation) and possibly the list of known tags
