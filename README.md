@@ -132,7 +132,7 @@ configuration for accessing the database.
 ### Schema Updates
 
 When upgrading to new version take a look at
-[db-updates-sql.md](db-updates-sql.md).
+[UPDATE.mg](UPDATE.md).
 
 ### Adding New Contacts
 
