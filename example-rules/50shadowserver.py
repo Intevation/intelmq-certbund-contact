@@ -30,6 +30,11 @@ def determine_directives(context):
             directive.update(shadowserver_params)
             directive.aggregate_by_field(context.section + ".asn")
             directive.aggregate_by_field("time.observation")
+
+            # A simple example to add a group indicator for later stats
+            if "water@example" in directive.recipient_address:
+                 directive.aggregate_key["recipient_group"]  = "CNI_water"
+
             context.add_directive(directive)
         return True
 
