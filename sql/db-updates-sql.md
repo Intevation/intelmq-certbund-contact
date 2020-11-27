@@ -6,7 +6,7 @@ This file contains instructions for upgrading the contact database.
 
 #### upgrade
 
-```
+```sh
   su - postgres
   psql \
     -f /usr/share/doc/intelmq-certbund-contact/sql/update-0.9.4.sql \
@@ -14,7 +14,7 @@ This file contains instructions for upgrading the contact database.
 ```
 
 Thereafter the access rights must be adjusted like:
-```
+```sql
   GRANT SELECT ON ALL TABLES IN SCHEMA public TO intelmq;
   GRANT SELECT, INSERT, UPDATE, DELETE
     ON ALL TABLES IN SCHEMA public TO contacts;
@@ -36,7 +36,7 @@ PostgreSQL 9.4 to accelerate operations on inet addresses.  Therefor
 an additional index must be created in the database, this is done by
 the provided update script:
 
-```
+```sh
   su - postgres
   psql \
     -f /usr/share/doc/intelmq-certbund-contact/sql/update-0.9.3.sql \
@@ -52,7 +52,7 @@ the code was maintained in the intelmq-certbund-contact repository.
 ### New Table `email_status`
 
 #### upgrade
-``sql
+```sql
 CREATE TABLE email_status (
     email VARCHAR(100) PRIMARY KEY,
     enabled BOOLEAN NOT NULL,
