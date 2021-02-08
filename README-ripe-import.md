@@ -60,7 +60,7 @@ cd $d
 ripe_import.py --conninfo dbname=contactdb --asn-whitelist-file=asn-DE.txt -v
 ```
 
-Here is a different example where the paths to the files is specified
+Here is a different example where the paths to the files are specified
 explicitly:
 
 ```
