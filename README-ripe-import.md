@@ -52,6 +52,10 @@ and which manual entries are related to the affected ASNs or networks.
 **Make sure the connection to the database is made
 with sufficient rights! Use the database superuser when in doubt.**
 
+
+**Have enough RAM: reading in the database from 2021-02-12 needs
+a little less than 8 GByte RAM, so system has to have more to keep running.**
+
 The next step assumes you are currently in the same folder like the data you
 downloaded.
 
@@ -83,3 +87,14 @@ points towards how to savely provide a password with a ~/.pgpass file.
 `ripe_data` independently of intelmq to write a simple check
 that operates on ripe's dbsplit datafiles. Capabilities and limitations
 are documented with `ripe_data.py`.
+
+
+### test data
+
+For many tests is it okay to just use a subset of the inet[6?]num objects.
+The following example limits the total lines and then an import uses
+about 0.5 GByte RAM:
+```sh
+gzip -d --stdout ../2021-02-12/ripe.db.inet6num.gz | head --lines=3000000 | gzip > ripe.db.inet6num.gz
+gzip -d --stdout ../2021-02-12/ripe.db.inetnum.gz | head --lines=3000000 | gzip > ripe.db.inetnum.gz
+```
