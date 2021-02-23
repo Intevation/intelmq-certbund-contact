@@ -10,7 +10,7 @@ Most of the actual work is done by :py:func:`notification_inhibited`.
 See its documentation for details.
 """
 
-from intelmq.bots.experts.certbund_contact.rulesupport \
+from intelmq_certbund_contact.rulesupport \
     import notification_inhibited
 
 """
