@@ -2,7 +2,7 @@
 
 """
 
-from intelmq.bots.experts.certbund_contact.rulesupport import \
+from intelmq_certbund_contact.rulesupport import \
     Directive, most_specific_matches
 
 

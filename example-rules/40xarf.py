@@ -6,7 +6,7 @@ which states the explicit wish to notify the contact in x-arf format.
 
 """
 
-from intelmq.bots.experts.certbund_contact.rulesupport import Directive
+from intelmq_certbund_contact.rulesupport import Directive
 
 
 # default X-ARF settings

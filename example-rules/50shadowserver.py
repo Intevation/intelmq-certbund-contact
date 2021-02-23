@@ -4,7 +4,7 @@ The notitification directives are determined based on the feed.name
 attribute of the event.
 """
 
-from intelmq.bots.experts.certbund_contact.rulesupport import Directive
+from intelmq_certbund_contact.rulesupport import Directive
 
 
 def determine_directives(context):

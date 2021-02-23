@@ -1,7 +1,7 @@
 """Choose the most relevant contacts
 """
 
-from intelmq.bots.experts.certbund_contact.rulesupport \
+from intelmq_certbund_contact.rulesupport \
     import keep_most_specific_contacts
 
 
