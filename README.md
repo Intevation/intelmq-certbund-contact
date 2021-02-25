@@ -1,6 +1,8 @@
-# Expert bot to lookup contact information in a database
+# Two expert bots to lookup contact information in a database and apply notification rules
 
 Part of the [intelmq-cb-mailgen solution](https://github.com/Intevation/intelmq-mailgen-release).
+
+An overview of the setup can be gained from the [IntelMQ Mailgen Docs](https://github.com/Intevation/intelmq-mailgen/tree/master/docs).
 
 ## Contact DB
 
@@ -128,6 +130,34 @@ configuration for accessing the database.
     psql -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO intelmq;" contactdb
 
 ```
+
+#### Adding default email tags
+
+The names, values and default values for tags directly associated with
+an email address have to be saved in the database.
+(Maybe future version of fody-backend and fody will allow editing them, but
+as of 2021-02-25 they don't.)
+
+The following example adds two tag names with a few values:
+
+```sql
+INSERT INTO tag_name (tag_name, tag_name_order) VALUES ('Format', 1);
+# -> id 1
+INSERT INTO tag_name (tag_name, tag_name_order) VALUES ('Constituency', 2);
+# -> id 2
+
+COPY tag (tag_name_id, tag_value, tag_description, is_default) FROM STDIN;
+1	CSV_inline	CSV inline	true
+1	CSV_attachment	CSV attachment	false
+2	network_operators	Network Operators	true
+2	government	Government	false
+2	CNI	Critical National Infrastructure	false
+2	CNI_energy	CNI Energy	false
+\.
+```
+
+(Tags for emails have been added with release 0.9.4 in 2019-05.)
+
 
 ### Schema Updates
 
