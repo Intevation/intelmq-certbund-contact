@@ -142,17 +142,18 @@ The following example adds two tag names with a few values:
 
 ```sql
 INSERT INTO tag_name (tag_name, tag_name_order) VALUES ('Format', 1);
-# -> id 1
+-- -> id 1
 INSERT INTO tag_name (tag_name, tag_name_order) VALUES ('Constituency', 2);
-# -> id 2
+-- -> id 2
 
-COPY tag (tag_name_id, tag_value, tag_description, is_default) FROM STDIN;
-1	CSV_inline	CSV inline	true
-1	CSV_attachment	CSV attachment	false
-2	network_operators	Network Operators	true
-2	government	Government	false
-2	CNI	Critical National Infrastructure	false
-2	CNI_energy	CNI Energy	false
+COPY tag (tag_name_id, tag_value, tag_description, is_default) FROM STDIN
+  WITH CSV;
+1,CSV_inline,CSV inline,true
+1,CSV_attachment,CSV attachment,false
+2,network_operators,Network Operators,true
+2,government,Government,false
+2,CNI,Critical National Infrastructure,false
+2,CNI_energy,CNI Energy,false
 \.
 ```
 
