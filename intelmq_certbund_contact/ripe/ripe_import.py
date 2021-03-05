@@ -59,7 +59,7 @@ def insert_new_network_entries(cur, network_list, key, verbose):
     In some cases a single entry read from the RIPE data file may have
     to be stored as several entries in the network_automatic table
     because the address range can only be expressed by the union of
-    severa network addresses in CIDR notation. This also means that some
+    several network addresses in CIDR notation. This also means that some
     entries in the RIPE data for different ranges may need the same CIDR
     value as part of their network_automatic entries. This function will
     only create one entry in network_automatic in such cases.

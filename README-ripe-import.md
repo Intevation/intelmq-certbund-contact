@@ -32,7 +32,7 @@ to see all command line options.
 The importer is capable of importing only entries which can be associated to a
 CountryCode. This is suppported natively for `inetnum` and `inetnum6` data
 (IP-Data). For ASN an additional step is required, as the `autnum` datasets
-(ASN-Data) do not provide this information. Thats where the `delegated-list`
+(ASN-Data) do not provide this information. That is where the `delegated-list`
 comes to play. In order to import only IP and ASN Data for one country, for
 instance DE, use the following parameters: `--restrict-to-country DE` and
 `--ripe-delegated-file delegated-ripencc-latest`.
