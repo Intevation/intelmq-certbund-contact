@@ -95,6 +95,9 @@ For many tests is it okay to just use a subset of the inet[6?]num objects.
 The following example limits the total lines and then an import uses
 about 0.5 GByte RAM:
 ```sh
-gzip -d --stdout ../2021-02-12/ripe.db.inet6num.gz | head --lines=3000000 | gzip > ripe.db.inet6num.gz
-gzip -d --stdout ../2021-02-12/ripe.db.inetnum.gz | head --lines=3000000 | gzip > ripe.db.inetnum.gz
+day=2021-03-03
+cp --archive $day $day-trunc
+cd $day-trunc
+gzip -d --stdout ../$day/ripe.db.inet6num.gz | head --lines=300000 | gzip > ripe.db.inet6num.gz
+gzip -d --stdout ../$day/ripe.db.inetnum.gz | head --lines=300000 | gzip > ripe.db.inetnum.gz
 ```
