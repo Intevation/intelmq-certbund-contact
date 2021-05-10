@@ -37,7 +37,7 @@ import intelmq_certbund_contact.ripe.ripe_data as ripe_data
 SOURCE_NAME = 'ripe'
 
 
-def remove_old_entries(cur, verbose):
+def remove_old_entries(cur, verbose, delete_route_data=False):
     """Remove the entries imported by previous runs."""
     if verbose:
         print('** Removing old entries from database...')
@@ -50,6 +50,8 @@ def remove_old_entries(cur, verbose):
     cur.execute("DELETE FROM contact_automatic WHERE import_source = %s;",
                 (SOURCE_NAME,))
     cur.execute("DELETE FROM organisation_automatic WHERE import_source = %s;",
+                (SOURCE_NAME,))
+    cur.execute("DELETE FROM route_automatic WHERE import_source = %s;",
                 (SOURCE_NAME,))
 
 
@@ -186,6 +188,21 @@ def insert_new_contact_entries(cur, role_list, abusec_to_org, mapping, verbose):
                         (email, mapping[orh]['org_id'], SOURCE_NAME))
 
 
+def insert_new_routes(cur, route_list, key, verbose):
+    if verbose:
+        print('** Saving {} data to database...'.format(key))
+
+    for entry in route_list:
+        # 'origin' is the ASN. Some values contain what appears to be
+        # comments (e.g. "origin: # AS1234 # FOO") them which we need to
+        # strip.
+        asn = entry['origin'][0].split()[0][2:]
+        cur.execute("""INSERT INTO route_automatic
+                                   (address, asn, import_source, import_time)
+                       VALUES (%s, %s, %s, CURRENT_TIMESTAMP)""",
+                    (entry[key][0], asn, SOURCE_NAME))
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=""
@@ -204,14 +221,14 @@ def main():
         print('------------------------')
 
     (asn_list, organisation_list, role_list, abusec_to_org, inetnum_list,
-     inet6num_list) = ripe_data.load_ripe_files(args)
+     inet6num_list, route_list, route6_list) = ripe_data.load_ripe_files(args)
 
     con = None
     try:
         con = psycopg2.connect(dsn=args.conninfo)
         cur = con.cursor()
 
-        remove_old_entries(cur, args.verbose)
+        remove_old_entries(cur, args.verbose, args.import_route_data)
 
         # network addresses
         org_inet6_mapping = insert_new_network_entries(
@@ -234,6 +251,13 @@ def main():
         #
         insert_new_contact_entries(cur, role_list, abusec_to_org, mapping,
                                    args.verbose)
+
+        #
+        # Routing
+        #
+        if args.import_route_data:
+            insert_new_routes(cur, route_list, 'route', args.verbose)
+            insert_new_routes(cur, route6_list, 'route6', args.verbose)
 
         # Commit all data
         con.commit()
