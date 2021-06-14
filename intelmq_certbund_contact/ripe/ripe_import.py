@@ -214,6 +214,12 @@ def main():
     ripe_data.add_db_args(parser)
     ripe_data.add_common_args(parser)
 
+    parser.add_argument("--before-commit-command",
+                        help=("SQL statement that is executed before committing"
+                              " the changes. This can be used to e.g. cleanup"
+                              " data that refers to the potentially changed"
+                              " RIPE data."))
+
     args = parser.parse_args()
 
     if args.verbose:
@@ -258,6 +264,13 @@ def main():
         if args.import_route_data:
             insert_new_routes(cur, route_list, 'route', args.verbose)
             insert_new_routes(cur, route6_list, 'route6', args.verbose)
+
+        # run "before commit command"
+        if args.before_commit_command:
+            if args.verbose:
+                print('Running before commit command...')
+                print('------------------------')
+            cur.execute(args.before_commit_command)
 
         # Commit all data
         con.commit()
