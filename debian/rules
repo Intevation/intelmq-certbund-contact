@@ -6,8 +6,9 @@ export PYBUILD_NAME=intelmq-certbund-contact
 
 override_dh_auto_install:
 	dh_auto_install
-	mkdir debian/intelmq-certbund-contact/usr/share/intelmq-certbund-contact
-	mv debian/intelmq-certbund-contact/usr/share/doc/intelmq-certbund-contact/BOTS debian/intelmq-certbund-contact/usr/share/intelmq-certbund-contact/
+	mkdir -p debian/intelmq-certbund-contact/usr/share/intelmq-certbund-contact
+	mkdir -p debian/intelmq-certbund-contact/usr/share/doc/intelmq-certbund-contact
+	cp BOTS debian/intelmq-certbund-contact/usr/share/intelmq-certbund-contact/
 	ln -s ../../intelmq-certbund-contact/BOTS debian/intelmq-certbund-contact/usr/share/doc/intelmq-certbund-contact/BOTS
 
 # Don't compress example rules:
