@@ -37,23 +37,26 @@ from intelmq_certbund_contact.eventjson import del_certbund_contacts
 
 class CERTBundRuleExpertBot(Bot):
 
+    script_directory: str = "/opt/intelmq/var/lib/bots/notification_rules"
+    remove_contact_data: bool = True
+    sections: str = "source"
+
     def init(self):
         self.sections = [section.strip() for section in
-                         getattr(self.parameters,
+                         getattr(self,
                                  "sections", "source").split(",")]
         self.logger.debug("Sections: %r", self.sections)
 
-        self.script_directory = \
-            getattr(self.parameters, "script_directory",
-                    "/opt/intelmq/var/lib/bots/notification_rules")
+        # self.script_directory = \
+        #     getattr(self.parameters, "script_directory",
+        #             "/opt/intelmq/var/lib/bots/notification_rules")
         self.entry_points = load_scripts(self.script_directory,
                                          "determine_directives",
                                          logger=self.logger)
         if not self.entry_points:
             self.logger.warning("No rules loaded.")
 
-        self.remove_contact_data = getattr(self.parameters,
-                                           "remove_contact_data", "true")
+        self.remove_contact_data = self.remove_contact_data
 
     def process(self):
         self.logger.debug("Calling receive_message")
