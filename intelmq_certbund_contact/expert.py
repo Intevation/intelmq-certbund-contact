@@ -35,10 +35,18 @@ from intelmq_certbund_contact.eventjson import set_certbund_contacts
 
 class CERTBundKontaktExpertBot(Bot):
 
+    database: str = "contactdb"
+    user: str = ""
+    host: str = "localhost"
+    port: int = 5432
+    sslmode: str = "require"
+    password: str = ""
+    sections: str = "source"
+    __sects = []
+
     def init(self):
-        self.sections = [section.strip() for section in
-                         getattr(self.parameters,
-                                 "sections", "source").split(",")]
+        self._sects = [self.sections.strip() for section in
+                            self.sections.split(",")]
         self.logger.debug("Sections: %r.", self.sections)
         try:
             self.logger.debug("Trying to connect to database.")
@@ -50,15 +58,15 @@ class CERTBundKontaktExpertBot(Bot):
     def connect_to_database(self):
         self.logger.debug("Connecting to PostgreSQL: database=%r, user=%r, "
                           "host=%r, port=%r, sslmode=%r.",
-                          self.parameters.database, self.parameters.user,
-                          self.parameters.host, self.parameters.port,
-                          self.parameters.sslmode)
-        self.con = psycopg2.connect(database=self.parameters.database,
-                                    user=self.parameters.user,
-                                    host=self.parameters.host,
-                                    port=self.parameters.port,
-                                    password=self.parameters.password,
-                                    sslmode=self.parameters.sslmode)
+                          self.database, self.user,
+                          self.host, self.port,
+                          self.sslmode)
+        self.con = psycopg2.connect(database=self.database,
+                                    user=self.user,
+                                    host=self.host,
+                                    port=self.port,
+                                    password=self.password,
+                                    sslmode=self.sslmode)
         self.con.autocommit = True
         self.logger.debug("Connected to PostgreSQL.")
 
@@ -70,7 +78,7 @@ class CERTBundKontaktExpertBot(Bot):
             self.acknowledge_message()
             return
 
-        for section in self.sections:
+        for section in self.__sects:
             ip = event.get(section + ".ip")
             asn = event.get(section + ".asn")
             fqdn = event.get(section + ".fqdn")
