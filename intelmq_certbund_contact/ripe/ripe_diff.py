@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Show differences between RIPE data files and database.
 
-
-Copyright (C) 2016, 2017, 2018 by Bundesamt für Sicherheit in der Informationstechnik
+Copyright (C) 2016-2018, 2021 by Bundesamt für Sicherheit in der Informationstechnik
 Software engineering by Intevation GmbH
 
 This program is Free Software: you can redistribute it and/or modify
@@ -22,9 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/agpl.html>.
 Author(s):
     Bernhard E. Reiter <bernhard.reiter@intevation.de>
     Bernhard Herzog <bernhard.herzog@intevation.de>
-"""
-
-import sys
+"""  # noqa
 import argparse
 import ipaddress
 from enum import Enum
@@ -176,7 +172,8 @@ def find_overlaid_manual_entries(cur, org, change):
     for asn in org.asns:
         results = common.lookup_by_manual_asn(cur, asn)
         if results:
-            print("        AS{} via manual db entries resolves to:".format(asn))
+            print("        AS{} via manual db entries"
+                  "resolves to:".format(asn))
             for result in results:
                 print("            {}".format(result))
 
@@ -192,13 +189,13 @@ def compare_orgs(cur, old_orgs, new_orgs):
     removed, both, added = compare_dicts(old_orgs, new_orgs)
 
     if added:
-        print("organisations to be added:")
+        print("Organisations to be added:")
         for handle in added:
             print("    %s: %r" % (handle, new_orgs[handle].name,))
             find_overlaid_manual_entries(cur, new_orgs[handle], Change.added)
 
     if removed:
-        print("organisations to be deleted:")
+        print("Organisations to be deleted:")
         for handle in removed:
             print("    %s: %r" % (handle, old_orgs[handle].name,))
             find_overlaid_manual_entries(cur, old_orgs[handle], Change.removed)
@@ -219,24 +216,14 @@ def compare_orgs(cur, old_orgs, new_orgs):
                                              Change.modified)
 
 
-def compare_unattached(name, old, new):
-    removed, both, added = compare_sets(set(old), set(new))
-    if removed:
-        print("Unattached %s to be removed:" % (name,))
-        for item in sorted(removed):
-            print("    ", item)
-    if added:
-        print("Unattached %s to be added:" % (name,))
-        for item in sorted(added):
-            print("    ", item)
-
-
 def compare_orgs_with_db(cur, asn_list, inetnum_list, inet6num_list,
                          organisation_list, role_list, abusec_to_org):
     orgs, unattached_as, unattached_roles = \
         build_organisation_objects(asn_list, inetnum_list, inet6num_list,
                                    organisation_list, role_list, abusec_to_org)
     db_orgs = build_organisation_objects_from_db(cur)
+
+    print("\n== Differences:")
     compare_orgs(cur, db_orgs, orgs)
 
 

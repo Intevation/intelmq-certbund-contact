@@ -1,3 +1,9 @@
+intelmq-certbund-contact (0.9.4-1) unstable; urgency=medium
+
+  * Fixed placement of BOTS file (issues/16).
+
+ -- Sascha Wilde <wilde@intevation.de>  Fri, 22 Oct 2021 18:38:47 +0200
+
 intelmq-certbund-contact (0.9.4) unstable; urgency=medium
 
   * Added new email tags feature.

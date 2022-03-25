@@ -4,9 +4,12 @@ export PYBUILD_NAME=intelmq-certbund-contact
 %:
 	dh $@ --with python3 --without python2 --buildsystem=pybuild
 
-# override_dh_auto_install:
-# 	python3 setup.py install --root=debian/$(PYBUILD_NAME) \
-# 		--prefix=/usr --install-lib=/usr/lib/python3/dist-packages
+override_dh_auto_install:
+	dh_auto_install
+	mkdir -p debian/intelmq-certbund-contact/usr/share/intelmq-certbund-contact
+	mkdir -p debian/intelmq-certbund-contact/usr/share/doc/intelmq-certbund-contact
+	cp BOTS debian/intelmq-certbund-contact/usr/share/intelmq-certbund-contact/
+	ln -s ../../intelmq-certbund-contact/BOTS debian/intelmq-certbund-contact/usr/share/doc/intelmq-certbund-contact/BOTS
 
 # Don't compress example rules:
 override_dh_compress:

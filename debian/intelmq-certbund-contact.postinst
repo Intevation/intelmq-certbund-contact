@@ -4,7 +4,7 @@ set -e
 if [ "$1" = "configure" ] ; then
   tmpfile=`mktemp -t BOTS.XXXXXXXXXX`
   jq -s '.[0] * .[1]' /etc/intelmq/BOTS \
-    /usr/share/doc/intelmq-certbund-contact/BOTS \
+    /usr/share/intelmq-certbund-contact/BOTS \
     >"$tmpfile"
   cat "$tmpfile"> /etc/intelmq/BOTS
   rm "$tmpfile"

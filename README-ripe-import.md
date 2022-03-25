@@ -32,7 +32,7 @@ to see all command line options.
 The importer is capable of importing only entries which can be associated to a
 CountryCode. This is suppported natively for `inetnum` and `inetnum6` data
 (IP-Data). For ASN an additional step is required, as the `autnum` datasets
-(ASN-Data) do not provide this information. Thats where the `delegated-list`
+(ASN-Data) do not provide this information. That is where the `delegated-list`
 comes to play. In order to import only IP and ASN Data for one country, for
 instance DE, use the following parameters: `--restrict-to-country DE` and
 `--ripe-delegated-file delegated-ripencc-latest`.
@@ -95,6 +95,9 @@ For many tests is it okay to just use a subset of the inet[6?]num objects.
 The following example limits the total lines and then an import uses
 about 0.5 GByte RAM:
 ```sh
-gzip -d --stdout ../2021-02-12/ripe.db.inet6num.gz | head --lines=3000000 | gzip > ripe.db.inet6num.gz
-gzip -d --stdout ../2021-02-12/ripe.db.inetnum.gz | head --lines=3000000 | gzip > ripe.db.inetnum.gz
+day=2021-03-03
+cp --archive $day $day-trunc
+cd $day-trunc
+gzip -d --stdout ../$day/ripe.db.inet6num.gz | head --lines=300000 | gzip > ripe.db.inet6num.gz
+gzip -d --stdout ../$day/ripe.db.inetnum.gz | head --lines=300000 | gzip > ripe.db.inetnum.gz
 ```
