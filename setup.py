@@ -3,6 +3,7 @@
 import json
 import os
 import sys
+from pathlib import Path
 
 from setuptools import find_packages, setup
 
@@ -12,11 +13,13 @@ REQUIRES = [
 ]
 
 BOTS = []
-bots = json.load(open(os.path.join(os.path.dirname(__file__), 'BOTS')))
-for bot_type, bots in bots.items():
-    for bot_name, bot in bots.items():
-        module = bot['module']
-        BOTS.append('{0} = {0}:BOT.run'.format(module))
+#bots = json.load(open(os.path.join(os.path.dirname(__file__), 'BOTS')))
+base_path = './intelmq/bots'
+bots = [botfile for botfile in Path(base_path).glob('**/*.py') if botfile.is_file() and not botfile.name.startswith('_')]
+for file in bots:
+    file = Path(str(file).replace(str(base_path), 'intelmq/bots'))
+    module = '.'.join(file.with_suffix('').parts)
+    BOTS.append('{0} = {0}:BOT.run'.format(module))
 
 ENTRY_POINTS = [
     "ripe_import = intelmq_certbund_contact.ripe.ripe_import:main",
