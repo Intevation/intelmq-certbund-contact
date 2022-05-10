@@ -13,7 +13,6 @@ REQUIRES = [
 ]
 
 BOTS = []
-#bots = json.load(open(os.path.join(os.path.dirname(__file__), 'BOTS')))
 base_path = './intelmq/bots'
 bots = [botfile for botfile in Path(base_path).glob('**/*.py') if botfile.is_file() and not botfile.name.startswith('_')]
 for file in bots:

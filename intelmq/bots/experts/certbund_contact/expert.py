@@ -71,12 +71,7 @@ class CERTBundKontaktExpertBot(Bot):
         self.logger.debug("Connected to PostgreSQL.")
 
     def process(self):
-        self.logger.debug("Calling receive_message.")
         event = self.receive_message()
-
-        if event is None:
-            self.acknowledge_message()
-            return
 
         for section in self.__sects:
             ip = event.get(section + ".ip")

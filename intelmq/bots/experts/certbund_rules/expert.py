@@ -43,27 +43,17 @@ class CERTBundRuleExpertBot(Bot):
 
     def init(self):
         self.sections = [section.strip() for section in
-                         getattr(self,
-                                 "sections", "source").split(",")]
+                         self."sections".split(",")]
         self.logger.debug("Sections: %r", self.sections)
 
-        # self.script_directory = \
-        #     getattr(self.parameters, "script_directory",
-        #             "/opt/intelmq/var/lib/bots/notification_rules")
         self.entry_points = load_scripts(self.script_directory,
                                          "determine_directives",
                                          logger=self.logger)
         if not self.entry_points:
             self.logger.warning("No rules loaded.")
 
-        self.remove_contact_data = self.remove_contact_data
-
     def process(self):
-        self.logger.debug("Calling receive_message")
         event = self.receive_message()
-        if event is None:
-            self.acknowledge_message()
-            return
 
         for section in self.sections:
             context = Context(event, section, self.logger)
