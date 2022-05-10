@@ -8,7 +8,7 @@ from pathlib import Path
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    'intelmq>=1.1.0',
+    'intelmq>=3.0.2',
     'psycopg2',
 ]
 
