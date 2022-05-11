@@ -8,12 +8,11 @@ from pathlib import Path
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    'intelmq>=1.1.0',
+    'intelmq>=3.0.2',
     'psycopg2',
 ]
 
 BOTS = []
-#bots = json.load(open(os.path.join(os.path.dirname(__file__), 'BOTS')))
 base_path = './intelmq/bots'
 bots = [botfile for botfile in Path(base_path).glob('**/*.py') if botfile.is_file() and not botfile.name.startswith('_')]
 for file in bots:
