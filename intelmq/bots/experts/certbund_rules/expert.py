@@ -43,7 +43,7 @@ class CERTBundRuleExpertBot(Bot):
 
     def init(self):
         self.sections = [section.strip() for section in
-                         self."sections".split(",")]
+                         self.sections.split(",")]
         self.logger.debug("Sections: %r", self.sections)
 
         self.entry_points = load_scripts(self.script_directory,
