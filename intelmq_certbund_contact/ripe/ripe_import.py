@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Import a set of RIPE data files into the certbund-contact db.
 
@@ -245,7 +244,3 @@ def main():
     finally:
         if con:
             con.close()
-
-
-if __name__ == '__main__':
-    main()

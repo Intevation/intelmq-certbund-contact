@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Show differences between RIPE data files and database.
 
 Copyright (C) 2016-2018, 2021 by Bundesamt für Sicherheit in der Informationstechnik
@@ -248,7 +247,3 @@ def main():
                              abusec_to_org)
     finally:
         con.close()
-
-
-if __name__ == '__main__':
-    main()
