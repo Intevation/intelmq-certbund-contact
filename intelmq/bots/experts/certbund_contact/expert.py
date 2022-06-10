@@ -42,12 +42,12 @@ class CERTBundKontaktExpertBot(Bot):
     sslmode: str = "require"
     password: str = ""
     sections: str = "source"
-    __sects = []
+    _sects = []
 
     def init(self):
-        self._sects = [self.sections.strip() for section in
-                            self.sections.split(",")]
-        self.logger.debug("Sections: %r.", self.sections)
+        self._sects = [section.strip() for section in
+                       self.sections.split(",")]
+        self.logger.debug("Sections: %r.", self._sects)
         try:
             self.logger.debug("Trying to connect to database.")
             self.connect_to_database()
@@ -73,7 +73,7 @@ class CERTBundKontaktExpertBot(Bot):
     def process(self):
         event = self.receive_message()
 
-        for section in self.__sects:
+        for section in self._sects:
             ip = event.get(section + ".ip")
             asn = event.get(section + ".asn")
             fqdn = event.get(section + ".fqdn")
