@@ -22,13 +22,10 @@ Author(s):
     Raimund Renkert <raimund.renkert@intevation.de>
     Sebastian Wagner <sebastian.wagner@intevation.de>
 """
-import sys
-
 try:
     import psycopg2
 except ImportError:
     psycopg2 = None
-
 
 from intelmq.lib.bot import Bot
 import intelmq_certbund_contact.common as common
@@ -50,12 +47,8 @@ class CERTBundKontaktExpertBot(Bot):
         self._sects = [section.strip() for section in
                        self.sections.split(",")]
         self.logger.debug("Sections: %r.", self._sects)
-        try:
-            self.logger.debug("Trying to connect to database.")
-            self.connect_to_database()
-        except BaseException:
-            self.logger.exception("Failed to connect to database!")
-            self.stop()
+        # Bot class itself handles execeptions caused by the connection
+        self.connect_to_database()
 
     def connect_to_database(self):
         self.logger.debug("Connecting to PostgreSQL: database=%r, user=%r, "
