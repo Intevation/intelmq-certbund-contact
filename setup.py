@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import json
-import os
-import sys
 from pathlib import Path
 
 from setuptools import find_packages, setup
