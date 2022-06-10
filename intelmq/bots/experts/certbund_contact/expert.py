@@ -1,7 +1,7 @@
 """Look up the certbund-contact database.
 
 
-Copyright (C) 2016, 2017 by Bundesamt für Sicherheit in der Informationstechnik
+Copyright (C) 2016, 2017, 2022 by Bundesamt für Sicherheit in der Informationstechnik
 Software engineering by Intevation GmbH
 
 This program is Free Software: you can redistribute it and/or modify
@@ -19,6 +19,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/agpl.html>.
 
 Author(s):
     Bernhard Herzog <bernhard.herzog@intevation.de>
+    Raimund Renkert <raimund.renkert@intevation.de>
+    Sebastian Wagner <sebastian.wagner@intevation.de>
 """
 import sys
 
