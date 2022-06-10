@@ -1,0 +1,9 @@
+# editors
+*.bak
+*.swp
+*.pyc
+*.log
+*.*~
+# packaging build files
+dist/
+intelmq_certbund_contact.egg-info/
