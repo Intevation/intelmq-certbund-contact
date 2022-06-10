@@ -27,9 +27,9 @@ ENTRY_POINTS = [
 
 setup(
     name='intelmq_certbund_contact',
-    version="0.9.5.dev0",
+    version="0.9.5",
     maintainer='Intevation GmbH',
-    maintainer_email='bernhard.herzog@intevation.de',
+    maintainer_email='sebastian.wagner@intevation.de',
     python_requires='>=3.4',
     install_requires=REQUIRES,
     packages=find_packages("."),

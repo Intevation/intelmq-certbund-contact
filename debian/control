@@ -9,7 +9,7 @@ Homepage: https://github.com/Intevation/intelmq-certbund-contact
 
 Package: intelmq-certbund-contact
 Architecture: all
-Depends: ${misc:Depends}, ${python3:Depends}, intelmq (>= 1.1.0),
-  intelmq-mailgen (>= 1.00~rc3), gawk, jq
+Depends: ${misc:Depends}, ${python3:Depends}, intelmq (>= 3.0.2),
+  intelmq-mailgen (>= 1.00~rc3), gawk, python3-psycopg2
 Description: IntelMQ Contacts is a contact database for IntelMQ
  with related expert bots

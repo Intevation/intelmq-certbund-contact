@@ -1,3 +1,9 @@
+intelmq-certbund-contact (0.9.5-1) unstable; urgency=medium
+
+  * IntelMQ 3.0 compatibility.
+
+ -- Sebastian Wagner <sebix@sebix.at>  Fri, 10 Jun 2022 14:36:04 +0200
+
 intelmq-certbund-contact (0.9.4-1) unstable; urgency=medium
 
   * Fixed placement of BOTS file (issues/16).
