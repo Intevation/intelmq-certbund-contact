@@ -1,4 +1,4 @@
-intelmq-certbund-contact (0.9.6-1) unstable; urgency=medium
+intelmq-certbund-contact (0.9.6) unstable; urgency=medium
 
   * Fix exception after reload by using _internal variable names only.
 
