@@ -1,3 +1,9 @@
+intelmq-certbund-contact (0.9.6-2) unstable; urgency=medium
+
+  * Packaging: Try with --with-quilt in rules.
+
+ -- Sebastian Wagner <sebix@sebix.at>  Mon, 20 Jun 2022 15:50:46 +0200
+
 intelmq-certbund-contact (0.9.6-1) unstable; urgency=medium
 
   * Fix exception after reload by using _internal variable names only.
