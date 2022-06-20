@@ -42,23 +42,23 @@ class CERTBundRuleExpertBot(Bot):
     sections: str = "source"
 
     def init(self):
-        self.sections = [section.strip() for section in
-                         self.sections.split(",")]
-        self.logger.debug("Sections: %r", self.sections)
+        self._sections = [section.strip() for section in
+                          self.sections.split(",")]
+        self.logger.debug("Sections: %r", self._sections)
 
-        self.entry_points = load_scripts(self.script_directory,
-                                         "determine_directives",
-                                         logger=self.logger)
-        if not self.entry_points:
+        self._entry_points = load_scripts(self.script_directory,
+                                          "determine_directives",
+                                          logger=self.logger)
+        if not self._entry_points:
             self.logger.warning("No rules loaded.")
 
     def process(self):
         event = self.receive_message()
 
-        for section in self.sections:
+        for section in self._sections:
             context = Context(event, section, self.logger)
             self.logger.debug("Calling scripts for section %r.", section)
-            for entry in self.entry_points:
+            for entry in self._entry_points:
                 self.logger.debug("Calling script %r.", entry.filename)
                 try:
                     finished = entry(context)

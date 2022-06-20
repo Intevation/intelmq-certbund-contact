@@ -1,3 +1,9 @@
+intelmq-certbund-contact (0.9.6-1) unstable; urgency=medium
+
+  * Fix exception after reload by using _internal variable names only.
+
+ -- Sebastian Wagner <sebix@sebix.at>  Mon, 20 Jun 2022 14:59:55 +0200
+
 intelmq-certbund-contact (0.9.5-1) unstable; urgency=medium
 
   * IntelMQ 3.0 compatibility.
