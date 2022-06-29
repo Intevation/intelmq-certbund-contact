@@ -7,6 +7,7 @@ from setuptools import find_packages, setup
 REQUIRES = [
     'intelmq>=3.0.2',
     'psycopg2',
+    'intelmqmail',
 ]
 
 BOTS = []
@@ -24,7 +25,7 @@ ENTRY_POINTS = [
 
 setup(
     name='intelmq_certbund_contact',
-    version="0.9.5",
+    version="0.9.7",
     maintainer='Intevation GmbH',
     maintainer_email='sebastian.wagner@intevation.de',
     python_requires='>=3.4',

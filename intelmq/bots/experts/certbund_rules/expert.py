@@ -29,6 +29,8 @@ except ImportError as err:
     if 'unittest' in sys.modules:
         import unittest
         raise unittest.SkipTest("Importing intelmqmail.script failed.")
+    else:
+        raise
 
 from intelmq.lib.bot import Bot
 from intelmq_certbund_contact.rulesupport import Context
