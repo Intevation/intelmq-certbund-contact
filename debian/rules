@@ -8,6 +8,7 @@ override_dh_auto_install:
 	dh_auto_install
 	mkdir -p debian/intelmq-certbund-contact/usr/share/intelmq-certbund-contact
 	mkdir -p debian/intelmq-certbund-contact/usr/share/doc/intelmq-certbund-contact
+	cp -r sql debian/intelmq-certbund-contact/usr/share/intelmq-certbund-contact/
 # Remove __init__.py files since they already exist in intelmq, that must be
 # installed for this package
 
