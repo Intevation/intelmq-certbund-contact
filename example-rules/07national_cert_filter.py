@@ -6,8 +6,8 @@ annotation was set for this organisation
 def determine_directives(context):
     context.logger.debug("============= 07national_cert_filter.py  ===========")
     context.logger.debug("Content of the Context BEFORE this script:")
-    context.logger.debug("Organisations %r" % context.organisations)
-    context.logger.debug("Matches %r" % context.matches)
+    context.logger.debug("Organisations %r", context.organisations)
+    context.logger.debug("Matches %r", context.matches)
 
     FILTER_CERT = "DE"
     FILTER_ANNOTATION = "Erhalte-DE"
@@ -57,8 +57,8 @@ def determine_directives(context):
     context.matches = new_matches
 
     context.logger.debug("Content of the Context AFTER this script:")
-    context.logger.debug("Organisations %r" % context.organisations)
-    context.logger.debug("Matches %r" % context.matches)
+    context.logger.debug("Organisations %r", context.organisations)
+    context.logger.debug("Matches %r", context.matches)
 
     # Return None, because other scripts still have to run
     return None

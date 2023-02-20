@@ -112,7 +112,7 @@ def add_matter_directives_to_context(context, match, matter):
 
         # Determine the Annotations for this Org.
         org_annotations = org.annotations
-        context.logger.debug("Org Annotations: %r" % org_annotations)
+        context.logger.debug("Org Annotations: %r", org_annotations)
 
         is_government = False
         is_critical = False

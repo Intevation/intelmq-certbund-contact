@@ -9,8 +9,8 @@ TESTGROUP_TAG = "testbetrieb"
 def determine_directives(context):
     context.logger.debug("============= 06testbetrieb.py ===========")
     context.logger.debug("Content of the Context BEFORE this script:")
-    context.logger.debug("Organisations %r" % context.organisations)
-    context.logger.debug("Matches %r" % context.matches)
+    context.logger.debug("Organisations %r", context.organisations)
+    context.logger.debug("Matches %r", context.matches)
 
     # Determine all manual matches, and the IDs of the Organisations
     # associated to this match.
@@ -37,8 +37,8 @@ def determine_directives(context):
     context.organisations = new_orgs
 
     context.logger.debug("Content of the Context AFTER this script:")
-    context.logger.debug("Organisations %r" % context.organisations)
-    context.logger.debug("Matches %r" % context.matches)
+    context.logger.debug("Organisations %r", context.organisations)
+    context.logger.debug("Matches %r", context.matches)
 
     # We'll return None, as other scripts shall still run....
     return None
