@@ -24,7 +24,7 @@ def determine_directives(context):
     for org in context.organisations:
         if any(annotation.tag == "xarf" for annotation in org.annotations):
             context.logger.debug("Create X-ARF Directive")
-            context.logger.debug(org.contacts)
+            context.logger.debug("Organisation contacts: %r", org.contacts)
             for contact in org.contacts:
                 directive = Directive.from_contact(contact)
                 directive.update(xarf_settings)

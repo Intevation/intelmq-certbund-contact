@@ -82,7 +82,7 @@ def determine_directives(context):
 def add_directives_to_context(context, matches, matter):
     # Generate Directives from the matches
 
-    context.logger.debug(matches)
+    context.logger.debug("%r", matches)
     for match in matches:
         # Iterate the matches...
         # Matches tell us the organisations and their contacts that
