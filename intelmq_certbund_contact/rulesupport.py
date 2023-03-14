@@ -545,10 +545,10 @@ class Context:
         """Return the event's value for the key."""
         return self._event[key]
 
-    def get(self, key):
+    def get(self, *args, **kwargs):
         """Return the event's value for the key if it exists, None otherwise.
         """
-        return self._event.get(key)
+        return self._event.get(*args, **kwargs)
 
     def add_directive(self, directive):
         """Add the directive to the context."""
