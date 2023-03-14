@@ -550,6 +550,9 @@ class Context:
         """
         return self._event.get(*args, **kwargs)
 
+    def pop(self, *args, **kwargs):
+        self._event.pop(*args, **kwargs)
+
     def add_directive(self, directive):
         """Add the directive to the context."""
         self._directives.append(directive)
