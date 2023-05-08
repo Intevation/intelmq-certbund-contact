@@ -32,12 +32,12 @@ except ImportError as err:
     else:
         raise
 
-from intelmq.lib.bot import Bot
+from intelmq.lib.bot import ExpertBot
 from intelmq_certbund_contact.rulesupport import Context
 from intelmq_certbund_contact.eventjson import del_certbund_contacts
 
 
-class CERTBundRuleExpertBot(Bot):
+class CERTBundRuleExpertBot(ExpertBot):
 
     script_directory: str = "/opt/intelmq/var/lib/bots/notification_rules"
     remove_contact_data: bool = True

@@ -27,12 +27,12 @@ try:
 except ImportError:
     psycopg2 = None
 
-from intelmq.lib.bot import Bot
+from intelmq.lib.bot import ExpertBot
 import intelmq_certbund_contact.common as common
 from intelmq_certbund_contact.eventjson import set_certbund_contacts
 
 
-class CERTBundKontaktExpertBot(Bot):
+class CERTBundKontaktExpertBot(ExpertBot):
 
     database: str = "contactdb"
     user: str = ""
