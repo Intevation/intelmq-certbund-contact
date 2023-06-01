@@ -1,4 +1,4 @@
-intelmq-certbund-contact (0.9.9) unstable; urgency=medium
+intelmq-certbund-contact (0.9.9-1) unstable; urgency=medium
 
   * make bots subclasses of ExpertBot, allows calling the bots in library mode
 

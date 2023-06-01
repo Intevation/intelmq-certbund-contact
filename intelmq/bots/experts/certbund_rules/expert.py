@@ -64,6 +64,7 @@ class CERTBundRuleExpertBot(ExpertBot):
                 self.logger.debug("Calling script %r.", entry.filename)
                 try:
                     finished = entry(context)
+                    #finished = entry(context, botref=self)
                     self.logger.debug("Script returned %r.", finished)
                     context.ensure_data_consistency()
                 finally:

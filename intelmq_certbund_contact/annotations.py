@@ -131,6 +131,9 @@ class Const(Expr):
     def evaluate(self, context):
         return self.value
 
+    def __repr__(self):
+        return f"Const(value={self.value})"
+
 
 def expr_from_json(json_obj):
     if isinstance(json_obj, list):

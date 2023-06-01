@@ -331,6 +331,7 @@ class Directive:
         aggregate_identifier = self.aggregate_key.copy()
         for field in self.aggregate_fields:
             aggregate_identifier[field] = event.get(field)
+        print('as_dict_for_event, aggregate_identifier', aggregate_identifier, )
 
         return dict(medium=self.medium,
                     recipient_address=self.recipient_address,
