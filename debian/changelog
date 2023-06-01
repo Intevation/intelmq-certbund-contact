@@ -1,3 +1,9 @@
+intelmq-certbund-contact (0.9.9) unstable; urgency=medium
+
+  * make bots subclasses of ExpertBot, allows calling the bots in library mode
+
+ -- Sebastian Wagner <swagner@intevation.de>  Thu, 01 Jun 2023 20:47:47 +0200
+
 intelmq-certbund-contact (0.9.8-1) unstable; urgency=medium
 
   * Packaging: place sql/ in datadir, not docs, fixes #20
