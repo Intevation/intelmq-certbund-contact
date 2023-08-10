@@ -2,7 +2,7 @@
 
 Part of the [intelmq-cb-mailgen solution](https://github.com/Intevation/intelmq-mailgen-release).
 
-An overview of the setup can be gained from the [IntelMQ Mailgen Docs](https://github.com/Intevation/intelmq-mailgen/tree/master/docs).
+An overview of the setup can be gained from the [IntelMQ Mailgen Docs](http://intevation.github.io/intelmq-mailgen/).
 
 ## Contact DB
 
