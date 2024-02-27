@@ -221,7 +221,7 @@ def insert_new_routes(cur, route_list, key, verbose):
     psycopg2.extras.execute_values(
         cur,
         """INSERT INTO route_automatic
-                address, asn, import_source, import_time)
+                (address, asn, import_source, import_time)
             VALUES %s;""",
         _gen(),
         page_size=BULK_PAGE_SIZE,
