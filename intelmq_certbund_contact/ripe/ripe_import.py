@@ -28,13 +28,16 @@ Author(s):
 
 import sys
 import psycopg2
+import psycopg2.extras
 import argparse
 import collections
+from datetime import datetime, UTC
 
 import intelmq_certbund_contact.ripe.ripe_data as ripe_data
 
 
 SOURCE_NAME = 'ripe'
+BULK_PAGE_SIZE = 500
 
 
 def remove_old_entries(cur, verbose, delete_route_data=False):
@@ -127,25 +130,30 @@ def insert_new_organisations(cur, organisation_list, verbose):
 
     return mapping
 
-
-def insert_new_asn_org_entries(cur, asn_list, mapping):
-    # many-to-many table organisation <-> as number
+def _generate_asn_entries(asn_list, mapping):
+    insert_time = datetime.now(tz=UTC)
     for entry in asn_list:
         org_id = mapping[entry["org"][0]].get("org_id")
         if org_id is None:
             print("org_id None for AS organisation handle {!r}"
                   .format(entry["org"][0]))
             continue
+        yield (org_id, entry['aut-num'][0][2:], SOURCE_NAME, insert_time)
 
-        cur.execute("""INSERT INTO organisation_to_asn_automatic
-                                   (organisation_automatic_id, asn,
-                                    import_source, import_time)
-                       VALUES (%s, %s, %s, CURRENT_TIMESTAMP);""",
-                    (org_id, entry['aut-num'][0][2:], SOURCE_NAME))
+def insert_new_asn_org_entries(cur, asn_list, mapping):
+    # many-to-many table organisation <-> as number
+    psycopg2.extras.execute_values(
+        cur,
+        """INSERT INTO organisation_to_asn_automatic
+                        (organisation_automatic_id, asn,
+                        import_source, import_time)
+            VALUES %s;""",
+        _generate_asn_entries(asn_list, mapping),
+        page_size=BULK_PAGE_SIZE,
+    )
 
-
-def insert_new_network_org_entries(cur, org_net_mapping, mapping):
-    # many-to-many table organisation <-> network number
+def _generate_network_entries(org_net_mapping, mapping):
+    insert_time = datetime.now(tz=UTC)
     for org, networks in org_net_mapping.items():
         org_id = mapping[org].get("org_id")
         if org_id is None:
@@ -153,12 +161,20 @@ def insert_new_network_org_entries(cur, org_net_mapping, mapping):
             continue
 
         for network_id in networks:
-            cur.execute("""INSERT INTO organisation_to_network_automatic
-                                       (organisation_automatic_id,
-                                        network_automatic_id,
-                                        import_source, import_time)
-                            VALUES (%s, %s, %s, CURRENT_TIMESTAMP);""",
-                        (org_id, network_id, SOURCE_NAME))
+            yield (org_id, network_id, SOURCE_NAME, insert_time)
+
+def insert_new_network_org_entries(cur, org_net_mapping, mapping):
+    # many-to-many table organisation <-> network number
+    psycopg2.extras.execute_values(
+        cur,
+        """INSERT INTO organisation_to_network_automatic
+                       (organisation_automatic_id,
+                        network_automatic_id,
+                        import_source, import_time)
+            VALUES %s;""",
+        _generate_network_entries(org_net_mapping, mapping),
+        page_size=BULK_PAGE_SIZE,
+    )
 
 
 def insert_new_contact_entries(cur, role_list, abusec_to_org, mapping, verbose):
@@ -192,15 +208,24 @@ def insert_new_routes(cur, route_list, key, verbose):
     if verbose:
         print('** Saving {} data to database...'.format(key))
 
-    for entry in route_list:
-        # 'origin' is the ASN. Some values contain what appears to be
-        # comments (e.g. "origin: # AS1234 # FOO") them which we need to
-        # strip.
-        asn = entry['origin'][0].split()[0][2:]
-        cur.execute("""INSERT INTO route_automatic
-                                   (address, asn, import_source, import_time)
-                       VALUES (%s, %s, %s, CURRENT_TIMESTAMP)""",
-                    (entry[key][0], asn, SOURCE_NAME))
+    insert_time = datetime.now(tz=UTC)
+
+    def _gen():
+        for entry in route_list:
+            # 'origin' is the ASN. Some values contain what appears to be
+            # comments (e.g. "origin: # AS1234 # FOO") them which we need to
+            # strip.
+            asn = entry['origin'][0].split()[0][2:]
+            yield (entry[key][0], asn, SOURCE_NAME, insert_time)
+
+    psycopg2.extras.execute_values(
+        cur,
+        """INSERT INTO route_automatic
+                address, asn, import_source, import_time)
+            VALUES %s;""",
+        _gen(),
+        page_size=BULK_PAGE_SIZE,
+    )
 
 
 def main():
