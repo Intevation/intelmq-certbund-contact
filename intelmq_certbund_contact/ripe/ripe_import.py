@@ -31,7 +31,7 @@ import psycopg2
 import psycopg2.extras
 import argparse
 import collections
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 
 import intelmq_certbund_contact.ripe.ripe_data as ripe_data
 
@@ -131,7 +131,7 @@ def insert_new_organisations(cur, organisation_list, verbose):
     return mapping
 
 def _generate_asn_entries(asn_list, mapping):
-    insert_time = datetime.now(tz=UTC)
+    insert_time = datetime.now(tz=timezone.utc)
     for entry in asn_list:
         org_id = mapping[entry["org"][0]].get("org_id")
         if org_id is None:
@@ -153,7 +153,7 @@ def insert_new_asn_org_entries(cur, asn_list, mapping):
     )
 
 def _generate_network_entries(org_net_mapping, mapping):
-    insert_time = datetime.now(tz=UTC)
+    insert_time = datetime.now(tz=timezone.utc)
     for org, networks in org_net_mapping.items():
         org_id = mapping[org].get("org_id")
         if org_id is None:
@@ -208,7 +208,7 @@ def insert_new_routes(cur, route_list, key, verbose):
     if verbose:
         print('** Saving {} data to database...'.format(key))
 
-    insert_time = datetime.now(tz=UTC)
+    insert_time = datetime.now(tz=timezone.utc)
 
     def _gen():
         for entry in route_list:
