@@ -1,6 +1,3 @@
-This is a fork to support uploading RIPE data into [Tuency](https://gitlab.com/intevation/tuency/tuency)
-___
-
 # Two expert bots to lookup contact information in a database and apply notification rules
 
 Part of the [intelmq-cb-mailgen solution](https://github.com/Intevation/intelmq-mailgen-release).
