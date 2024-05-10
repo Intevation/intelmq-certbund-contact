@@ -417,7 +417,7 @@ class Context:
         organisations: The organisation associated with the matches
     """
 
-    def __init__(self, event, section, base_logger):
+    def __init__(self, event, section: str, base_logger=None):
         self._event = event
         self.section = section
         # base_logger should only be None for testing purposes.
@@ -486,6 +486,9 @@ class Context:
         removematches = []
         # A list of matches which turned out to be empty (= w/o org.) and will be removed
         # from the matches
+
+        # Ensure matches is always a list (could be a set or other type of iterable)
+        self._matches = list(self.matches)
 
         for match in self.matches:
             match.organisations = [orgid
