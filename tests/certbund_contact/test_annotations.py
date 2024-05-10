@@ -8,7 +8,7 @@ import json
 
 import unittest
 
-from intelmq.bots.experts.certbund_contact.annotations import from_json, \
+from intelmq_certbund_contact.annotations import from_json, \
      Annotation, AnnotationError
 
 

@@ -9,10 +9,10 @@ import unittest
 
 from intelmq.lib.message import Event
 
-from intelmq.bots.experts.certbund_contact.rulesupport import \
+from intelmq_certbund_contact.rulesupport import \
      Context, keep_most_specific_contacts
 
-from intelmq.bots.experts.certbund_contact.eventjson import \
+from intelmq_certbund_contact.eventjson import \
      set_certbund_contacts
 
 
