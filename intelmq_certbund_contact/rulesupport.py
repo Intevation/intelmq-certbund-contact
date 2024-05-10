@@ -20,9 +20,7 @@ Author(s):
     Bernhard Herzog <bernhard.herzog@intevation.de>
     Dustin Demuth <dustin.demuth@intevation.de>
 """
-from contextlib import contextmanager
 from collections import defaultdict
-from itertools import chain
 
 from intelmq_certbund_contact.eventjson import get_certbund_contacts, \
     set_certbund_directives
