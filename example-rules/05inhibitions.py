@@ -25,7 +25,7 @@ contactdb side.
 WHITELIST_TAGS = {
     "whitelist-malware": {
         "field": "classification.type",
-        "values": ["botnet drone"]
+        "values": ["infected-system"]
     },
     "whitelist-opendns": {
         "field": "classification.identifier",

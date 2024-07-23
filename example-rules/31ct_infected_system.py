@@ -1,8 +1,8 @@
 """Sample Rules to generate directives from Events
-which are classified as 'botnet drone'
+which are classified as 'infected-system'
 
 Note: Currently there is no such thing in IntelMQ like a
-classification.type 'malware-infected' so 'botnet drone' is
+classification.type 'malware-infected' so 'infected-system' is
 the best way to deal with these datasets for now.
 
 This script is supposed to handle events from:
@@ -23,7 +23,7 @@ Assumptions:
 from intelmq_certbund_contact.rulesupport import \
     Directive, most_specific_matches
 
-CTS_TO_WORK_WITH = ['botnet drone']
+CTS_TO_WORK_WITH = ['infected-system']
 
 GOVERNMENT_ANNOTATION = 'government'
 CRITICAL_ANNOTATION = 'critical'
