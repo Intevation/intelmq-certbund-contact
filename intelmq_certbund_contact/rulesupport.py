@@ -84,9 +84,16 @@ class Organisation:
         itself and the annotations associated with the contacts.
         """
         for annotation in self.annotations:
+            if annotation.expired:
+                self.logger.debug('Organisation Annotation %r of Organisation %r has expired %r!', annotation.tag, self.name, annotation.expires)
+                continue
             yield annotation
         for contact in self.contacts:
             for annotation in contact.annotations:
+                if annotation.expired:
+                    self.logger.debug('Contact Annotation %r of Organisation %r, Contact %r has expired %r!',
+                                      annotation.tag, self.name, contact.email, annotation.expires)
+                    continue
                 yield annotation
 
 
@@ -506,12 +513,22 @@ class Context:
         """Return an iterator over all annotations."""
         for item in self.organisations:
             for annotation in item.annotations:
+                if annotation.expired:
+                    self.logger.debug('Organisation Annotation %r of Organisation %r has expired %r!', annotation.tag, item.name, annotation.expires)
+                    continue
                 yield annotation
             for contact in item.contacts:
                 for annotation in contact.annotations:
+                    if annotation.expired:
+                        self.logger.debug('Contact Annotation %r of Organisation %r, Contact %r has expired %r!',
+                                          annotation.tag, item.name, contact.email, annotation.expires)
+                        continue
                     yield annotation
         for item in self.matches:
             for annotation in item.annotations:
+                if annotation.expired:
+                    self.logger.debug('Match Annotation %r has expired %r!', annotation.tag, annotation.expires)
+                    continue
                 yield annotation
 
     def lookup_organisation(self, orgid):

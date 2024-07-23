@@ -20,6 +20,8 @@ Author(s):
     Bernhard Herzog <bernhard.herzog@intevation.de>
 """
 
+from datetime import datetime, timezone
+
 
 class AnnotationError(Exception):
     pass
@@ -27,18 +29,24 @@ class AnnotationError(Exception):
 
 class Annotation:
 
-    def __init__(self, tag, condition=None):
+    def __init__(self, tag, condition=None, expires=None):
         self.tag = tag
         self.condition = condition
+        self.expires = expires
 
     def __repr__(self):
-        return "Annotation(%r, condition=%r)" % (self.tag, self.condition)
+        return "Annotation(%r, condition=%r, expires=%r)" % (self.tag, self.condition, self.expires)
 
     def __eq__(self, other):
         return self.tag == other.tag and self.condition == other.condition
 
     def __hash__(self):
         return hash((self.tag, self.condition))
+
+    @property
+    def expired(self):
+        today = datetime.now(timezone.utc).date().isoformat()
+        return self.expires and self.expires < today
 
     @classmethod
     def from_json(cls, json_obj):
@@ -47,10 +55,12 @@ class Annotation:
         tag = json_obj["tag"]
         if not isinstance(tag, str):
             raise AnnotationError("Annotation's tag is not a string")
-        return cls(tag, expr_from_json(json_obj.get("condition", "true")))
+        return cls(tag,
+                   condition=expr_from_json(json_obj.get("condition", "true")),
+                   expires=json_obj.get("expires"))
 
     def matches(self, context):
-        return self.condition is None or self.condition.evaluate(context)
+        return not self.expired and (self.condition is None or self.condition.evaluate(context))
 
 
 class Expr:

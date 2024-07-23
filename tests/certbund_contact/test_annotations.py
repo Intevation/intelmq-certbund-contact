@@ -142,6 +142,22 @@ class TestAnnotations(unittest.TestCase):
         # events:
         self.assertTrue(Annotation("a tag").matches({}))
 
+    def test_annotation_no_expiry(self):
+        self.assertFalse(Annotation("a").expired)
+
+    def test_annotation_expired(self):
+        self.assertFalse(Annotation("a", None, "9999-99-99").expired)
+
+    def test_annotation_not_expired_today(self):
+        from datetime import datetime, timezone
+        today = datetime.now(timezone.utc).date().isoformat()
+        self.assertFalse(Annotation("a", None, today).expired)
+
+    def test_annotation_expired(self):
+        self.assertTrue(Annotation("a", None, "2024-01-01").expired)
+
+    def test_annotation_expired_not_matches(self):
+        self.assertFalse(Annotation("a", None, "2024-01-01").matches({}))
 
 
 if __name__ == "__main__":
