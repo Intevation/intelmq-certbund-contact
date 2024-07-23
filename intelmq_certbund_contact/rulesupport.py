@@ -24,7 +24,7 @@ from collections import defaultdict
 
 from intelmq_certbund_contact.eventjson import get_certbund_contacts, \
     set_certbund_directives
-import intelmq_certbund_contact.annotations as annotations
+import intelmq_certbund_contact.annotations as annotations_lib
 
 
 class Organisation:
@@ -74,7 +74,7 @@ class Organisation:
                    sector=jsondict["sector"],
                    contacts=[Contact.from_json(c)
                              for c in jsondict["contacts"]],
-                   annotations=[annotations.from_json(a)
+                   annotations=[annotations_lib.from_json(a)
                                 for a in jsondict["annotations"]])
 
     def all_annotations(self):
@@ -122,7 +122,7 @@ class Contact:
         return cls(email=jsondict["email"],
                    managed=jsondict["managed"],
                    email_status=jsondict.get("email_status", "enabled"),
-                   annotations=[annotations.from_json(a)
+                   annotations=[annotations_lib.from_json(a)
                                 for a in jsondict.get("annotations", ())])
 
 
@@ -186,7 +186,7 @@ class Match:
         return cls(field=field,
                    managed=jsondict["managed"],
                    organisations=jsondict["organisations"],
-                   annotations=[annotations.from_json(a)
+                   annotations=[annotations_lib.from_json(a)
                                 for a in jsondict["annotations"]],
                    address=address)
 
