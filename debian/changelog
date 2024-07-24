@@ -1,3 +1,28 @@
+intelmq-certbund-contact (1.0.2-1) stable; urgency=medium
+
+  * Add tag expiry, plus evaluation and tests
+    Tags have now an optional expiry date, for example `{"tag": "name", expires: "2024-07-19"}`
+    Tags expire after the given date has passed.
+    Only dates are supported.
+   * Rulesupport
+    * `Context.ensure_data_consistency`: ensure matches is type list
+    * `Annotation`: fix repr output syntax
+    * New `Annotation.expired` property
+    * `Annotation.matches` also checks the expiry
+    * `Context.all_annotations` and `Organisation.all_annotations` only return non-expired annotations
+   * Example rules
+    * update inhibition (whitelist) example rule
+    * rename 'botnet drone' to infected-system
+   * Internal and development
+    * rename annotations import to prevent name clash
+    * setup.cfg: ignore some rules and directories
+    * Fix tests: import names, event syntax update
+    * rulesupport: remove obsolete import statements
+   * Documentation
+    * Mailgen documentation: link to rendered docs
+
+ -- Sebastian Wagner <swagner@intevation.de>  Wed, 24 Jul 2024 16:30:31 +0200
+
 intelmq-certbund-contact (0.9.9-1) unstable; urgency=medium
 
   * make bots subclasses of ExpertBot, allows calling the bots in library mode
