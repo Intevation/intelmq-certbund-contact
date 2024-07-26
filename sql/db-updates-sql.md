@@ -2,6 +2,23 @@
 
 This file contains instructions for upgrading the contact database.
 
+## Fody Audit Log (1.0.3)
+
+#### upgrade
+
+```sh
+  su - postgres
+  psql \
+    -f /usr/share/doc/intelmq-certbund-contact/sql/update-0.9.5.sql \
+    contactdb
+```
+
+Thereafter the access rights must be granted like:
+```sql
+  GRANT SELECT, INSERT, UPDATE, DELETE ON public.audit_log TO apiuser;
+  GRANT ALL ON public.audit_log_log_id_seq TO apiuser;
+```
+
 ## Email Tags (0.9.4)
 
 #### upgrade

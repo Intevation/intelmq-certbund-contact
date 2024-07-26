@@ -6,6 +6,13 @@ additional manual steps are needed.  These are documented here.
 If installing from scratch, please refer to README.md for the
 necessary steps.
 
+## Update to 1.0.3
+
+The Version 0.9.5 adds an audit log table for [Fody](github.com/Intevation/intelmq-fody-backend).
+
+The database must be updated according to the section **Fody Audit Log (0.9.5)** in
+[db-updates-sql.md](sql/db-updates-sql.md).
+
 ## Update to 0.9.4
 
 The Version 0.9.4 implements new email associated tags.  For them the
