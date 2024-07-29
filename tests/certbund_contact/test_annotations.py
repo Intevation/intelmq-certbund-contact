@@ -145,6 +145,12 @@ class TestAnnotations(unittest.TestCase):
     def test_annotation_no_expiry(self):
         self.assertFalse(Annotation("a").expired)
 
+    def test_annotation_no_expiry_empty_string(self):
+        self.assertFalse(Annotation("a", None, '').expired)
+        annotation = from_json(json.loads('{"tag": "bla"'
+                                          ',"expired": ""}'))
+        self.assertFalse(annotation.expired)
+
     def test_annotation_expired(self):
         self.assertFalse(Annotation("a", None, "9999-99-99").expired)
 
