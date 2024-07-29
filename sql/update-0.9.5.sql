@@ -30,7 +30,6 @@ ALTER TABLE fqdn_annotation
     ADD COLUMN created TIMESTAMP WITH TIME ZONE DEFAULT now();
 
 -- Type change from JSON to JSONB
-DROP FUNCTION email_annotations;
 CREATE OR REPLACE FUNCTION email_annotations(email_address VARCHAR(100))
 RETURNS JSONB AS
 $$
@@ -64,5 +63,8 @@ SELECT json_agg(COALESCE(annotation, default_annotation))
        FILTER (WHERE COALESCE(annotation, default_annotation) IS NOT NULL)
        INTO annotations
   FROM email_tags RIGHT OUTER JOIN default_annotations USING (tag_name_id);
+RETURN coalesce(annotations, '[]'::JSONB);
+END;
+$$ LANGUAGE plpgsql STABLE;
 
 COMMIT;

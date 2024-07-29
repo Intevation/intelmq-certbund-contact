@@ -471,7 +471,6 @@ SELECT json_agg(COALESCE(annotation, default_annotation))
        FILTER (WHERE COALESCE(annotation, default_annotation) IS NOT NULL)
        INTO annotations
   FROM email_tags RIGHT OUTER JOIN default_annotations USING (tag_name_id);
-
 RETURN coalesce(annotations, '[]'::JSONB);
 END;
 $$ LANGUAGE plpgsql STABLE;
