@@ -1,0 +1,19 @@
+name: Check for print statements
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  print:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Grep for print
+      run: |
+        ! grep -E 'print *\(' -r intelmq/ intelmq_certbund_contact/*.py
