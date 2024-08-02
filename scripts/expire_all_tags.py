@@ -115,7 +115,7 @@ def main():
                                     (new_annotation,
                                      result['network_annotation_id']))
                 # AS ANNOTATIONS
-                cur.execute(f"SELECT autonomous_system_annotation_id, annotation FROM autonomous_system_annotation NATURAL JOIN organisation_to_network {COMMON_WHERE}", (org_id, ))
+                cur.execute(f"SELECT autonomous_system_annotation_id, annotation FROM autonomous_system_annotation NATURAL JOIN  organisation_to_asn {COMMON_WHERE}", (org_id, ))
                 for result in cur.fetchall():
                     new_annotation = result['annotation']
                     new_annotation['expires'] = date
@@ -128,7 +128,7 @@ def main():
                                     (new_annotation,
                                      result['autonomous_system_annotation_id']))
                 # DOMAIN ANNOTATIONS
-                cur.execute(f"SELECT fqdn_annotation_id, annotation FROM fqdn_annotation NATURAL JOIN organisation_to_network {COMMON_WHERE}", (org_id, ))
+                cur.execute(f"SELECT fqdn_annotation_id, annotation FROM fqdn_annotation NATURAL JOIN organisation_to_fqdn {COMMON_WHERE}", (org_id, ))
                 for result in cur.fetchall():
                     new_annotation = result['annotation']
                     new_annotation['expires'] = date
