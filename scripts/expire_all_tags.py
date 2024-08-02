@@ -19,6 +19,7 @@ TIME_STEP = timedelta(days=7)
 MAXIMUM_STEPS = 20
 VERBOSE = True
 DRY_RUN = True
+TAG_PATTERN = 'Whitelist:%'
 
 
 def test_distribute_orgas_over_time():
@@ -66,12 +67,13 @@ def get_all_affected_organisations(cur):
         UNION SELECT 'asn' AS anno_type, organisation_id, annotation FROM autonomous_system_annotation NATURAL JOIN organisation_to_asn WHERE annotation ->> 'expires' = '' OR annotation ->> 'expires' IS NULL
         UNION SELECT 'fqdn' AS anno_type, organisation_id, annotation FROM fqdn_annotation NATURAL JOIN organisation_to_fqdn WHERE annotation ->> 'expires' = '' OR annotation ->> 'expires' IS NULL
         ) AS all_annos
-        WHERE annotation ->> 'tag' LIKE 'Whitelist:%%' AND (annotation ->> 'expires' = '' OR annotation ->> 'expires' IS NULL)
-        ORDER BY organisation_id""")
+        WHERE annotation ->> 'tag' LIKE %s AND (annotation ->> 'expires' = '' OR annotation ->> 'expires' IS NULL)
+        ORDER BY organisation_id""",
+        (TAG_PATTERN, ) )
     return cur.fetchall()
 
 
-COMMON_WHERE = "WHERE organisation_id = %s AND annotation ->> 'tag' LIKE 'Whitelist:%%' AND (annotation ->> 'expires' = '' OR annotation ->> 'expires' IS NULL)"
+COMMON_WHERE = "WHERE organisation_id = %s AND annotation ->> 'tag' LIKE %s AND (annotation ->> 'expires' = '' OR annotation ->> 'expires' IS NULL)"
 
 
 def main():
@@ -80,7 +82,7 @@ def main():
         cur = conn.cursor(cursor_factory=RealDictCursor)
 
         affected = get_all_affected_organisations(cur)
-        print(f"Retrieved {len(affected)} organisations with exired tags")
+        print(f"Retrieved {len(affected)} organisations with unexired tags matching {TAG_PATTERN!r}")
         affected_org_ids = [row['organisation_id'] for row in affected]
         distributed_orgas = distribute_orgas_over_time(affected_org_ids, MAXIMUM_STEPS)
         for date, org_ids in time_iterator(START_DATE, TIME_STEP, distributed_orgas):
@@ -89,7 +91,7 @@ def main():
                 if VERBOSE:
                     print(f'Processing Organisation ID {org_id}')
                 # ORGANISATION ANNOTATIONS
-                cur.execute(f"SELECT organisation_annotation_id, annotation FROM organisation_annotation {COMMON_WHERE}", (org_id, ))
+                cur.execute(f"SELECT organisation_annotation_id, annotation FROM organisation_annotation {COMMON_WHERE}", (org_id, TAG_PATTERN, ))
                 for result in cur.fetchall():
                     new_annotation = result['annotation']
                     new_annotation['expires'] = date
@@ -102,7 +104,7 @@ def main():
                                     (new_annotation,
                                      result['organisation_annotation_id']))
                 # NETWORK ANNOTATIONS
-                cur.execute(f"SELECT network_annotation_id, annotation FROM network_annotation NATURAL JOIN organisation_to_network {COMMON_WHERE}", (org_id, ))
+                cur.execute(f"SELECT network_annotation_id, annotation FROM network_annotation NATURAL JOIN organisation_to_network {COMMON_WHERE}", (org_id, TAG_PATTERN, ))
                 for result in cur.fetchall():
                     new_annotation = result['annotation']
                     new_annotation['expires'] = date
@@ -115,7 +117,7 @@ def main():
                                     (new_annotation,
                                      result['network_annotation_id']))
                 # AS ANNOTATIONS
-                cur.execute(f"SELECT autonomous_system_annotation_id, annotation FROM autonomous_system_annotation NATURAL JOIN  organisation_to_asn {COMMON_WHERE}", (org_id, ))
+                cur.execute(f"SELECT autonomous_system_annotation_id, annotation FROM autonomous_system_annotation NATURAL JOIN organisation_to_asn {COMMON_WHERE}", (org_id, TAG_PATTERN, ))
                 for result in cur.fetchall():
                     new_annotation = result['annotation']
                     new_annotation['expires'] = date
@@ -128,7 +130,7 @@ def main():
                                     (new_annotation,
                                      result['autonomous_system_annotation_id']))
                 # DOMAIN ANNOTATIONS
-                cur.execute(f"SELECT fqdn_annotation_id, annotation FROM fqdn_annotation NATURAL JOIN organisation_to_fqdn {COMMON_WHERE}", (org_id, ))
+                cur.execute(f"SELECT fqdn_annotation_id, annotation FROM fqdn_annotation NATURAL JOIN organisation_to_fqdn {COMMON_WHERE}", (org_id, TAG_PATTERN, ))
                 for result in cur.fetchall():
                     new_annotation = result['annotation']
                     new_annotation['expires'] = date
