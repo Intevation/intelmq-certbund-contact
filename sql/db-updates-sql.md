@@ -9,7 +9,7 @@ This file contains instructions for upgrading the contact database.
 ```sh
   su - postgres
   psql \
-    -f /usr/share/doc/intelmq-certbund-contact/sql/update-0.9.5.sql \
+    -f /usr/share/doc/intelmq-certbund-contact/sql/update-1.0.3.sql \
     contactdb
 ```
 
