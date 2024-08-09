@@ -68,7 +68,6 @@ CREATE TABLE organisation_annotation (
     organisation_annotation_id SERIAL PRIMARY KEY,
     organisation_id INTEGER NOT NULL,
     annotation JSONB NOT NULL,
-    created TIMESTAMP WITH TIME ZONE DEFAULT now(),
 
     FOREIGN KEY (organisation_id) REFERENCES organisation(organisation_id)
 );
@@ -128,8 +127,7 @@ CREATE INDEX contact_automatic_organisation_idx
 CREATE TABLE autonomous_system_annotation (
     autonomous_system_annotation_id SERIAL PRIMARY KEY,
     asn BIGINT NOT NULL,
-    annotation JSONB NOT NULL,
-    created TIMESTAMP WITH TIME ZONE DEFAULT now()
+    annotation JSONB NOT NULL
 );
 
 CREATE INDEX autonomous_system_annotation_asn_idx
@@ -200,7 +198,6 @@ CREATE TABLE network_annotation (
     network_annotation_id SERIAL PRIMARY KEY,
     network_id INTEGER NOT NULL,
     annotation JSONB NOT NULL,
-    created TIMESTAMP WITH TIME ZONE DEFAULT now(),
 
     FOREIGN KEY (network_id) REFERENCES network(network_id)
 );
@@ -241,7 +238,6 @@ CREATE TABLE fqdn_annotation (
     fqdn_annotation_id SERIAL PRIMARY KEY,
     fqdn_id INTEGER NOT NULL,
     annotation JSONB NOT NULL,
-    created TIMESTAMP WITH TIME ZONE DEFAULT now(),
 
     FOREIGN KEY (fqdn_id) REFERENCES fqdn(fqdn_id)
 );
@@ -482,7 +478,6 @@ CREATE TABLE audit_log (
     time TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     "table" VARCHAR(50) NOT NULL,
     "user" TEXT NOT NULL,
-    created TIMESTAMP WITH TIME ZONE,
     operation VARCHAR(20) NOT NULL,
     object_type TEXT NOT NULL,
     object_value TEXT NOT NULL,

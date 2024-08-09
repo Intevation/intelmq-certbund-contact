@@ -5,7 +5,6 @@ CREATE TABLE audit_log (
     time TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     "table" VARCHAR(50) NOT NULL,
     "user" TEXT NOT NULL,
-    created TIMESTAMP WITH TIME ZONE,
     operation VARCHAR(20) NOT NULL,
     object_type TEXT NOT NULL,
     object_value TEXT NOT NULL,
@@ -14,20 +13,16 @@ CREATE TABLE audit_log (
 );
 
 ALTER TABLE organisation_annotation
-    ALTER COLUMN annotation SET DATA TYPE jsonb,
-    ADD COLUMN created TIMESTAMP WITH TIME ZONE DEFAULT now();
+    ALTER COLUMN annotation SET DATA TYPE jsonb;
 
 ALTER TABLE autonomous_system_annotation
-    ALTER COLUMN annotation SET DATA TYPE jsonb,
-    ADD COLUMN created TIMESTAMP WITH TIME ZONE DEFAULT now();
+    ALTER COLUMN annotation SET DATA TYPE jsonb;
 
 ALTER TABLE network_annotation
-    ALTER COLUMN annotation SET DATA TYPE jsonb,
-    ADD COLUMN created TIMESTAMP WITH TIME ZONE DEFAULT now();
+    ALTER COLUMN annotation SET DATA TYPE jsonb;
 
 ALTER TABLE fqdn_annotation
-    ALTER COLUMN annotation SET DATA TYPE jsonb,
-    ADD COLUMN created TIMESTAMP WITH TIME ZONE DEFAULT now();
+    ALTER COLUMN annotation SET DATA TYPE jsonb;
 
 -- Type change from JSON to JSONB
 CREATE OR REPLACE FUNCTION email_annotations(email_address VARCHAR(100))
