@@ -1,3 +1,25 @@
+intelmq-certbund-contact (1.1.0-1) stable; urgency=medium
+
+  * Audit Log
+    * Add a new table audit_log, used by fody
+    * Use JSONB instead of JSON for annotation tables, which allows comparisons
+    * add script to expire all tags in database
+      * Add an expiry date to all existing annotations matching a configurable tag pattern
+      * All annotations of an organisation expire at the same day
+      * The expire dates are spread over a configurable time window
+    * add script to delete expired tags, with audit log
+  * Documentation:
+    * 0.9.5 sql update: fix SQL command
+    * fix version numbers in UPDATE.md
+  * Packaging:
+    * rename examples/ to scripts/
+    * package the scripts, as docs
+  * Tests:
+    * remove print statement, add GitHub check for it
+    * tests: add annotation test for empty string expires field
+
+ -- Sebastian Wagner <swagner@intevation.de>  Wed, 14 Aug 2024 13:43:04 +0200
+
 intelmq-certbund-contact (1.0.2-1) stable; urgency=medium
 
   * Add tag expiry, plus evaluation and tests
