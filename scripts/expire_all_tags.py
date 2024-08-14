@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 Add an expiry date to all existing annotations matching "Whitelist:" (can be changed)
 All annotations of an organisation expire at the same day
