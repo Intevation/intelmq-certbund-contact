@@ -114,21 +114,19 @@ The following commands assume that PostgreSQL is running and listening on the
 default port. They create a database called "contactdb" which matches the
 default configuration of the bot.
 
-```
-    su - postgres
-
-    createdb --encoding=UTF8 --template=template0 contactdb
-    psql -f /usr/share/doc/intelmq-certbund-contact/sql/initdb.sql   contactdb
+```bash
+su - postgres
+createdb --encoding=UTF8 --template=template0 contactdb
+psql -f /usr/share/intelmq-certbund-contact/sql/initdb.sql contactdb
 ```
 
 A database user with the right to select the data in the Contact DB
 must be created.  This is the account, which will be used in the bot's
 configuration for accessing the database.
 
-```
-    createuser intelmq --pwprompt
-    psql -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO intelmq;" contactdb
-
+```bash
+createuser intelmq --pwprompt
+psql -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO intelmq;" contactdb
 ```
 
 #### Adding default email tags
