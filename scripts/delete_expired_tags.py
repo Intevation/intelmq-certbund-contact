@@ -53,7 +53,8 @@ def main():
     parser.add_argument('-v', '--verbose', action='count', default=0)
     parser.add_argument('-n', '--dry-run', action='store_true')
     parser.add_argument('age', help="Postgres-parseable date interval, for example '1 month'")
-    parser.add_argument('-u', '--audit-log-user', default=DEFAULT_AUDIT_LOG_USER, help='The username to appear in the audit log for deleting the expired annotations')
+    parser.add_argument('-u', '--audit-log-user', default=DEFAULT_AUDIT_LOG_USER,
+                        help=f'The username to appear in the audit log for deleting the expired annotations. Default: {DEFAULT_AUDIT_LOG_USER}')
     args = parser.parse_args()
 
     from contactdb_api.contactdb_api.serve import read_configuration
