@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 import unittest
 
 import intelmq.lib.test as test
-from intelmq.bots.experts.certbund_contact.expert import CERTBundKontaktExpertBot
+from intelmq_certbund_contact.experts.certbund_contact.expert import CERTBundKontaktExpertBot
 
 
 EXAMPLE_INPUT = {"__type": "Event",

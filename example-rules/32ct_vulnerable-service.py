@@ -146,7 +146,7 @@ def add_vulnerable_directives_to_context(context, match, matter):
             # Doing this defines "email" as medium and uses the
             # contact's email attribute as the recipient_address.
             # One could also do this by hand, see Directive in
-            # intelmq.bots.experts.certbund_contact.rulesupport
+            # intelmq_certbund_contact.experts.certbund_contact.rulesupport
             # If you like to know more details
 
             # Now fill in more details of the directive, depending on

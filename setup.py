@@ -10,17 +10,12 @@ REQUIRES = [
     'intelmqmail',
 ]
 
-BOTS = []
-base_path = './intelmq/bots'
-bots = [botfile for botfile in Path(base_path).glob('**/*.py') if botfile.is_file() and not botfile.name.startswith('_')]
-for file in bots:
-    file = Path(str(file).replace(str(base_path), 'intelmq/bots'))
-    module = '.'.join(file.with_suffix('').parts)
-    BOTS.append('{0} = {0}:BOT.run'.format(module))
-
 ENTRY_POINTS = [
     "ripe_import = intelmq_certbund_contact.ripe.ripe_import:main",
     "ripe_diff = intelmq_certbund_contact.ripe.ripe_diff:main",
+    # the entry points IntelMQ is searching for, see https://docs.intelmq.org/latest/dev/extensions-packages/#building-an-extension-package
+    "intelmq.bots.experts.certbund_contact.expert = intelmq_certbund_contact.bots.experts.certbund_contact.expert:BOT.run",
+    "intelmq.bots.experts.certbund_rules.expert = intelmq_certbund_contact.bots.experts.certbund_rules.expert:BOT.run"
 ]
 
 setup(
@@ -33,7 +28,7 @@ setup(
     packages=find_packages("."),
     description=('IntelMQ Contacts is a contact database for IntelMQ'
                  ' with related expert bots'),
-    entry_points={'console_scripts': BOTS + ENTRY_POINTS},
+    entry_points={'console_scripts': ENTRY_POINTS},
     scripts=["bin/ripe_download",
              "bin/import-national-certs"],
 )

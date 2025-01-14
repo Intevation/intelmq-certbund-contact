@@ -32,7 +32,7 @@ def determine_directives(context):
                              most_specific_matches(context))
         # This line will log only those matches which are considered as
         # "most_specific" The SourceCode of
-        # intelmq.bots.experts.certbund_contact.rulesupport can tell you
+        # intelmq_certbund_contact.experts.certbund_contact.rulesupport can tell you
         # more details how this is evaluated. In short: FQDN is more
         # specific than IP than ASN than geolocation.cc (indicating a
         # nat. cert) So we will use the Output of the helper method
@@ -136,7 +136,7 @@ def evaluate_match(context, match):
             # Doing this defines "email" as medium and uses the
             # contact's email attribute as the recipient_address.
             # One could also do this by hand, see Directive in
-            # intelmq.bots.experts.certbund_contact.rulesupport
+            # intelmq_certbund_contact.experts.certbund_contact.rulesupport
             # If you like to know more details
 
             # Now fill in more details of the directive, depending on

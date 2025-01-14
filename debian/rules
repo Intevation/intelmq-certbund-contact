@@ -9,14 +9,6 @@ override_dh_auto_install:
 	mkdir -p debian/intelmq-certbund-contact/usr/share/intelmq-certbund-contact
 	mkdir -p debian/intelmq-certbund-contact/usr/share/doc/intelmq-certbund-contact
 	cp -r sql debian/intelmq-certbund-contact/usr/share/intelmq-certbund-contact/
-# Remove __init__.py files since they already exist in intelmq, that must be
-# installed for this package
-
-override_dh_python3:
-	dh_python3
-	rm debian/intelmq-certbund-contact/usr/lib/python3/dist-packages/intelmq/__init__.py
-	rm debian/intelmq-certbund-contact/usr/lib/python3/dist-packages/intelmq/bots/__init__.py
-	rm debian/intelmq-certbund-contact/usr/lib/python3/dist-packages/intelmq/bots/experts/__init__.py
 
 # Don't compress example rules:
 override_dh_compress:
