@@ -274,3 +274,7 @@ evaluated or not.
 
 You can use `postgresql-autodoc` to do this. PG autodoc is available on both
 debian and ubuntu via apt.
+
+# Running the tests
+
+Simply use pytest or `make tests`.
