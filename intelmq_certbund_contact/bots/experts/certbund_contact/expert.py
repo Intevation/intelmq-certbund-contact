@@ -27,6 +27,9 @@ try:
 except ImportError:
     psycopg2 = None
 
+from collections import defaultdict
+from json import dumps as json_dumps, loads as json_loads
+
 from intelmq.lib.bot import ExpertBot
 import intelmq_certbund_contact.common as common
 from intelmq_certbund_contact.eventjson import set_certbund_contacts
@@ -84,7 +87,7 @@ class CERTBundKontaktExpertBot(ExpertBot):
         self.send_message(event)
         self.acknowledge_message()
 
-    def lookup_contacts(self, cur, asn, ip, fqdn, country_code):
+    def lookup_contacts(self, cur, asn, ip, fqdn, country_code) -> dict:
         automatic = common.lookup_contacts(cur, common.Managed.automatic, asn,
                                            ip, fqdn, country_code)
         self.renumber_organisations_in_place(automatic)
@@ -94,14 +97,33 @@ class CERTBundKontaktExpertBot(ExpertBot):
                                              len(automatic["organisations"]))
         return {key: automatic[key] + manual[key] for key in automatic}
 
-    def renumber_organisations_in_place(self, matches, start=0):
+    def renumber_organisations_in_place(self, contacts: dict, start=0):
+        """
+        1. Start organisation IDs at 0 or the given start number
+        2. Merge duplicate matches (when two contacts)
+        """
         idmap = {}
-        for new_id, org in enumerate(matches["organisations"], start):
+        for new_id, org in enumerate(contacts["organisations"], start):
             idmap[org["id"]] = new_id
             org["id"] = new_id
 
-        for match in matches["matches"]:
+        for match in contacts["matches"]:
             match["organisations"] = [idmap[i] for i in match["organisations"]]
+
+        # merge identical matches
+        if len(contacts['matches']) > 1:
+            # the matches without organisation IDs, mapped to a list of organisation IDs
+            matches_unique = defaultdict(list)
+            for match in contacts['matches']:
+                key = json_dumps({key: val for key, val in match.items() if key != 'organisations'})
+                matches_unique[key].extend(match['organisations'])
+            # merge the data together again
+            matches_extracted = []
+            for match, organisations in matches_unique.items():
+                extracted = json_loads(match)
+                extracted['organisations'] = sorted(organisations)  # sorting for reproducability
+                matches_extracted.append(extracted)
+            contacts["matches"] = matches_extracted
 
     def lookup_contact(self, ip, fqdn, asn, country_code):
         self.logger.debug("Looking up ip: %r, fqdn: %r, asn: %r.", ip, fqdn, asn)

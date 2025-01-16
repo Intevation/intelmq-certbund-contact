@@ -5,11 +5,12 @@ Testing certbund_contact
 """
 
 from __future__ import unicode_literals
+from copy import deepcopy
 
 import unittest
 
 import intelmq.lib.test as test
-from intelmq_certbund_contact.bots.experts.certbund_contact.expert import CERTBundKontaktExpertBot
+from intelmq_certbund_contact.bots.experts.certbund_contact.expert import CERTBundKontaktExpertBot, common
 
 
 EXAMPLE_INPUT = {"__type": "Event",
@@ -54,8 +55,24 @@ EXAMPLE_OUTPUT = {
     }}
 
 
-class CERTBundKontaktMockDBExpertBot(CERTBundKontaktExpertBot):
 
+ORGS1 = [
+    {"annotations": [],
+        "contacts": [{"annotations": [{"tag": "Target group:Some"}], "email": "automatic@example.com", "email_status": "enabled", "managed": "automatic"}],
+        "id": 0, "import_source": "ripe", "managed": "automatic", "name": "Org Name", "sector": None
+    },
+    {"annotations": [],
+        "contacts": [{"annotations": [{"tag": "Target group:Some"}], "email": "manual1@example.com", "email_status": "enabled", "managed": "manual"}],
+        "id": 1, "import_source": "", "managed": "manual", "name": "Org Name", "sector": None
+    },
+    {"annotations": [],
+        "contacts": [{"annotations": [{"tag": "Target group:Some"}], "email": "manual2@example.com", "email_status": "enabled", "managed": "manual"}],
+        "id": 2, "import_source": "", "managed": "manual", "name": "Org Name", "sector": None
+    }
+]
+
+
+class CERTBundKontaktMockDBExpertBot(CERTBundKontaktExpertBot):
     """CERTBundKontaktExpertBot that mocks all database accesses"""
 
     def connect_to_database(self):
@@ -92,13 +109,23 @@ class CERTBundKontaktMockDBExpertBot(CERTBundKontaktExpertBot):
                              }],
                          }]
                     }
+        elif ip == "127.0.0.10":
+            return {"organisations": ORGS1,
+                    "matches": [
+                        {"address": "127.0.0.0/30", "annotations": [], "field": "ip", "managed": "automatic", "organisations": [0]},
+                        {"address": "127.0.0.0/30", "annotations": [], "field": "ip", "managed": "manual", "organisations": [2]},
+                        {"address": "127.0.0.0/30", "annotations": [], "field": "ip", "managed": "manual", "organisations": [1]}
+                    ]}
         return {"matches": [], "organisations": []}
+
+RENUMBER_INPUT = {'organisations': [{'id': 72, 'name': 'TP Global Operations Limited', 'sector': None, 'contacts': [{'email': 'abuse@truphone.com', 'managed': 'automatic', 'email_status': 'enabled', 'annotations': [{'tag': 'Constituency:ISP'}, {'tag': 'Format:CSV_inline'}]}], 'annotations': [], 'managed': 'automatic', 'import_source': 'ripe'}], 'matches': [{'field': 'ip', 'address': '185.99.26.180/30', 'organisations': [72], 'annotations': [], 'managed': 'automatic'}]}
+RENUMBER_OUTPUT = {'organisations': [{'id': 0, 'name': 'TP Global Operations Limited', 'sector': None, 'contacts': [{'email': 'abuse@truphone.com', 'managed': 'automatic', 'email_status': 'enabled', 'annotations': [{'tag': 'Constituency:ISP'}, {'tag': 'Format:CSV_inline'}]}], 'annotations': [], 'managed': 'automatic', 'import_source': 'ripe'}], 'matches': [{'field': 'ip', 'address': '185.99.26.180/30', 'organisations': [0], 'annotations': [], 'managed': 'automatic'}]}
+
 
 
 class TestCERTBundKontaktMockDBExpertBot(test.BotTestCase, unittest.TestCase):
-
     """
-    A TestCase for CERTBundKontaktExpertBot.
+    A TestCase for TestCERTBundKontaktMockDBExpertBot.
     """
 
     @classmethod
@@ -111,6 +138,31 @@ class TestCERTBundKontaktMockDBExpertBot(test.BotTestCase, unittest.TestCase):
         self.run_bot()
         self.assertMessageEqual(0, EXAMPLE_OUTPUT)
 
+    def test_renumber_organisations_in_place(self):
+        self.prepare_bot()
+        msg = deepcopy(RENUMBER_INPUT)
+        self.bot.renumber_organisations_in_place(msg)
+        self.assertEqual(msg, RENUMBER_OUTPUT)
+        self.input_queue = []
+
+    def test_renumber_organisations_in_place_merge(self):
+        """ Assert that identical matches are merged """
+        self.prepare_bot()
+        msg = {"organisations": deepcopy(ORGS1),
+                    "matches": [
+                        {"address": "127.0.0.0/30", "annotations": [], "field": "ip", "managed": "automatic", "organisations": [0]},
+                        {"address": "127.0.0.0/30", "annotations": [], "field": "ip", "managed": "manual", "organisations": [2]},
+                        {"address": "127.0.0.0/30", "annotations": [], "field": "ip", "managed": "manual", "organisations": [1]}
+                    ]}
+        self.bot.renumber_organisations_in_place(msg)
+        self.assertEqual(msg,
+            {"organisations": ORGS1,
+                "matches": [
+                    {"address": "127.0.0.0/30", "annotations": [], "field": "ip", "managed": "automatic", "organisations": [0]},
+                    {"address": "127.0.0.0/30", "annotations": [], "field": "ip", "managed": "manual", "organisations": [1, 2]},
+                ]}
+            )
+        self.input_queue = []
 
 if __name__ == "__main__":
     unittest.main()
