@@ -161,7 +161,7 @@ COPY tag (tag_name_id, tag_value, tag_description, is_default) FROM STDIN
 ### Schema Updates
 
 When upgrading to new version take a look at
-[UPDATE.mg](UPDATE.md).
+[NEWS.md](NEWS.md).
 
 ### Adding New Contacts
 
