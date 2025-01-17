@@ -42,7 +42,7 @@ build () {
 
 	ARTIFACTEXTENSIONS=("deb" "xz" "dsc" "buildinfo" "changes")
 	PARENT=$(dirname "${GITHUB_WORKSPACE}")
-	apt-get install -y buildah
+	sudo apt-get install -y buildah
 	echo "Building on ${codename} in ${GITHUB_WORKSPACE}"
 
 	# fetch and configure the container

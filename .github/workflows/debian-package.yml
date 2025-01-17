@@ -10,7 +10,7 @@ on:
 
 jobs:
   debian:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       # Fixes https://github.com/actions/virtual-environments/issues/3080
       STORAGE_OPTS: overlay.mount_program=/usr/bin/fuse-overlayfs
