@@ -6,6 +6,13 @@ additional manual steps are needed.  These are documented here.
 If installing from scratch, please refer to README.md for the
 necessary steps.
 
+## Update to 1.2.0
+
+This version adds RIPE routing information to a `route_automatic` table, only used by Tuency.
+See https://github.com/Intevation/intelmq-certbund-contact/pull/23
+
+Use [`sql/update-1.2.0.sql`](sql/update-1.2.0.sql) to create the table and index.
+
 ## Update to 0.9.4
 
 The Version 0.9.4 implements new email associated tags.  For them the

@@ -131,6 +131,7 @@ def insert_new_organisations(cur, organisation_list, verbose):
     return mapping
 
 def _generate_asn_entries(asn_list, mapping):
+    # set the identical import time for all bulk-inserted entries
     insert_time = datetime.now(tz=timezone.utc)
     for entry in asn_list:
         org_id = mapping[entry["org"][0]].get("org_id")
