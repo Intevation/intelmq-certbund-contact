@@ -4,15 +4,18 @@ intelmq-certbund-contact (1.2.0-1) UNRELEASED; urgency=medium
     * use https://docs.intelmq.org/latest/dev/extensions-packages/
     * instead of hand-crafted installation
     * also allows us to execute our tests easily
-  * add example rule to prioritze by constituency
+  * add example rules:
+     * to prioritze by constituency
+     * generic rule to create directives
   * contact expert: merge identical matches
-  *     the search result can return multple organisations with the same match
-  *     instead of adding both match objects independently, merge them and link
-  *     all related organisations
+    * the search result can return multple organisations with the same match
+    * instead of adding both match objects independently, merge them and link
+    * all related organisations
   * Add GitHub workflows: Build package, run tests
   * setup.cfg: allow longer line length to for pylint
   * scripts: expire rules: add default user to help
   * documentation: Fix/update postgres setup
+  * Fix error loading RIPE data #24
 
  -- Sebastian Wagner <swagner@intevation.de>  Fri, 17 Jan 2025 12:20:32 +0100
 

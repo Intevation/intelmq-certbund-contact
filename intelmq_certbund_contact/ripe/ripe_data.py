@@ -289,6 +289,10 @@ def parse_file(filename, fields, index_field=None, restriction=lambda x: True,
 
     f.close()
 
+    # Save the last entry
+    if tmp and restriction(tmp):
+        out.append(tmp)
+
     if verbose:
         print('   -> read {0} entries'.format(len(out)))
 
