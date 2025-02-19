@@ -5,10 +5,10 @@ intelmq-certbund-contact (1.2.0-1) UNRELEASED; urgency=medium
     * instead of hand-crafted installation
     * also allows us to execute our tests easily
   * add example rules:
-     * to prioritze by constituency
+     * to prioritize by constituency
      * generic rule to create directives
   * contact expert: merge identical matches
-    * the search result can return multple organisations with the same match
+    * the search result can return multiple organisations with the same match
     * instead of adding both match objects independently, merge them and link
     * all related organisations
   * Add GitHub workflows: Build package, run tests

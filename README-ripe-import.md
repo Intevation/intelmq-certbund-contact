@@ -30,7 +30,7 @@ Call `ripe_import.py --help` or `ripe_diff.py --help`
 to see all command line options.
 
 The importer is capable of importing only entries which can be associated to a
-CountryCode. This is suppported natively for `inetnum` and `inetnum6` data
+CountryCode. This is supported natively for `inetnum` and `inetnum6` data
 (IP-Data). For ASN an additional step is required, as the `autnum` datasets
 (ASN-Data) do not provide this information. That is where the `delegated-list`
 comes to play. In order to import only IP and ASN Data for one country, for
@@ -80,7 +80,7 @@ ripe_import.py --conninfo "host=localhost dbname=contactdb" \
 Also see the
 [documentation of the libpg conninfo string](https://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-CONNSTRING).
 The [documentation on environment variables](https://www.postgresql.org/docs/current/static/libpq-envars.html) to the connection also
-points towards how to savely provide a password with a ~/.pgpass file.
+points towards how to safely provide a password with a ~/.pgpass file.
 
 ### use as a module
 `check-ripe.py` is a simple example how to use the module

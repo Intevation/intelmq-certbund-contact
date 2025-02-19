@@ -57,7 +57,7 @@ class MatchSelector:
     def get_preferred_by_field(self, field):
         """Get the preferred matches for the given field.
 
-        If both manuallly and automatically managed matches are present,
+        If both manually and automatically managed matches are present,
         only the manually managed matches are returned.
         """
         if field not in self.by_field:

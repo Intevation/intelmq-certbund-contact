@@ -21,7 +21,7 @@ in a straight forward way. Several import sources are possible.
 
 Therefore they have columns for `import_source` and `import_time`
 in order to later decide which information to use. And there are
-no fields for additional information as those informatiom may potentially
+no fields for additional information as those information may potentially
 get lost or be incorrect if the contents of the database changes
 during an update or re-import.
 
@@ -55,7 +55,7 @@ The annotations can be used as general "tags" to steer behaviour of
 the system that can be configured on the level of administration rights,
 but selected on the user level. The "simple" tags are designed to best be used
 to denote a group of properties for sending behaviour that can be combined.
-It is recommended to keep the numer of tags low.
+It is recommended to keep the number of tags low.
 The tags have to be tuned after gaining experience in production use
 and they will be easy to use if good tags are chosen over time.
 
@@ -95,12 +95,12 @@ a week or every two weeks for each import source, like:
  1. Check diffs if you would import for necessary changes.
  2. Stop the lookup expert-bot.
  3. Do the manual changes (e.g. with fody).
- 4. Completly replace the automatic tables of this source with the new version.
+ 4. Completely replace the automatic tables of this source with the new version.
  5. Restart the lookup bot.
 
 For RIPE there is a script that will show the difference
 between old and new automatic entries
-and which manual entries are affected by theses changes (see link
+and which manual entries are affected by these changes (see link
 to the RIPE documentation above).
 
 
@@ -261,7 +261,7 @@ COMMIT;
 
 ## Suppress notification of contacts based upon certain criteria:
 
-It ist possible to suppress the notification of contacts based upon certain
+It is possible to suppress the notification of contacts based upon certain
 criteria. Such can be: AS-number, IP addresses, FQDN, or Organisations.
 
 To suppress notifications for such an Object, one has to create an annotation to

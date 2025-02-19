@@ -83,7 +83,7 @@ def main():
         cur = conn.cursor(cursor_factory=RealDictCursor)
 
         affected = get_all_affected_organisations(cur)
-        print(f"Retrieved {len(affected)} organisations with unexired tags matching {TAG_PATTERN!r}")
+        print(f"Retrieved {len(affected)} organisations with unexpired tags matching {TAG_PATTERN!r}")
         affected_org_ids = [row['organisation_id'] for row in affected]
         distributed_orgas = distribute_orgas_over_time(affected_org_ids, MAXIMUM_STEPS)
         for date, org_ids in time_iterator(START_DATE, TIME_STEP, distributed_orgas):

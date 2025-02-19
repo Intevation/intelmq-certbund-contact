@@ -19,7 +19,7 @@ def determine_directives(context):
         return
 
     if context.section == "destination":
-        # We are not interested in notifiying the Destination for this event.
+        # We are not interested in notifying the Destination for this event.
         return
 
     else:

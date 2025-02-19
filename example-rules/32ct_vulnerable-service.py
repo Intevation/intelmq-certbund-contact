@@ -61,7 +61,7 @@ def determine_directives(context):
         return
 
     # write the most specific matches into a variable. See
-    # 51avalanche.py for a more detailled description.
+    # 51avalanche.py for a more detailed description.
     msm = most_specific_matches(context)
 
     # Debugging Output about the Context.

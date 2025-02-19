@@ -272,7 +272,7 @@ def parse_file(filename, fields, index_field=None, restriction=lambda x: True,
             if key in fields:
                 # normalize country entries. The two-letter code is not
                 # always given in all uppercase and in some cases, the
-                # contry code is followed by additional content that
+                # country code is followed by additional content that
                 # appears to be a comment containing other country codes
                 # (e.g. country: DE # DE NL FR). The documentation does
                 # not mention this comment syntax and seems to imply

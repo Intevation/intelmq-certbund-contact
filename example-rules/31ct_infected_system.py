@@ -41,7 +41,7 @@ LOGGING_SET = set()
 def determine_directives(context):
     context.logger.debug("============= 31ct_botnet-drone.py ===========")
 
-    feed_name = context.get("feed.name")  # This could also be the classification.identier.
+    feed_name = context.get("feed.name")  # This could also be the classification.identifier.
     # It should work the same way.
     classification_type = context.get("classification.type")
 
@@ -55,7 +55,7 @@ def determine_directives(context):
         return
 
     # write the most specific matches into a variable. See
-    # 51avalanche.py for a more detailled description.
+    # 51avalanche.py for a more detailed description.
     msm = most_specific_matches(context)
 
     # Debugging Output about the Context.

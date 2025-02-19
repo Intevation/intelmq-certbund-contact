@@ -164,7 +164,7 @@ def find_overlaid_manual_entries(cur, org, change):
     elif change in (Change.modified, Change.added):
         msg = "        Info: this entry will be responsible for {formatted}"
     else:
-        raise ValueError("Unexpeced change value: {!r}".format(change))
+        raise ValueError("Unexpected change value: {!r}".format(change))
 
     print(msg.format(formatted=formatted))
 

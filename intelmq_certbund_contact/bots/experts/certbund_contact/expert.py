@@ -50,7 +50,7 @@ class CERTBundKontaktExpertBot(ExpertBot):
         self._sects = [section.strip() for section in
                        self.sections.split(",")]
         self.logger.debug("Sections: %r.", self._sects)
-        # Bot class itself handles execeptions caused by the connection
+        # Bot class itself handles exceptions caused by the connection
         self.connect_to_database()
 
     def connect_to_database(self):
@@ -121,7 +121,7 @@ class CERTBundKontaktExpertBot(ExpertBot):
             matches_extracted = []
             for match, organisations in matches_unique.items():
                 extracted = json_loads(match)
-                extracted['organisations'] = sorted(organisations)  # sorting for reproducability
+                extracted['organisations'] = sorted(organisations)  # sorting for reproducibility
                 matches_extracted.append(extracted)
             contacts["matches"] = matches_extracted
 

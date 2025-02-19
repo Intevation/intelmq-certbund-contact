@@ -11,7 +11,7 @@ def determine_directives(context):
     if context.section == "destination":
         return
 
-    # Find out which Shadowserver configuaration shall be used.
+    # Find out which Shadowserver configuration shall be used.
     # Usually the feed.name is set by the parser of the shadowserver data.
     shadowserver_params = shadowserver_mapping.get(context.get("feed.name"))
 
