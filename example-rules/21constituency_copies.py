@@ -7,10 +7,18 @@ Software engineering by Intevation GmbH
 
 from copy import deepcopy
 from collections import defaultdict
+import re
 
 from intelmq_certbund_contact.rulesupport import Organisation, Contact, Match, most_specific_matches
 from intelmq_certbund_contact.annotations import Annotation, Const
-from ruleshelper import get_contact_group
+
+def get_contact_group(contact):
+    for annotation in contact.annotations:
+        m = re.match("^(Constituency:)(.*)$", annotation.tag)
+        if m:
+            return m.groups()[1]
+    return None
+
 
 
 CONSTITUENCIES = {
@@ -20,12 +28,13 @@ CONSTITUENCIES = {
                                        annotations=[Annotation('Format:CSV_inline', condition=Const(True)),
                                                     Annotation('Constituency:network_operators', condition=Const(True))])],
                      annotations=[]),
-    "Finance":
+    "government":
         Organisation(name='Copy Government', orgid=-1, managed='manual', sector=None, import_source='21constituency_copies.py',
                      contacts=[Contact(email='finance@cert.example', managed='manual', email_status='enabled',
                                        annotations=[Annotation('Format:CSV_inline', condition=Const(True)),
                                                     Annotation('Constituency:government', condition=Const(True))])],
                      annotations=[]),
+#    "Finance": ...,
 #    "CNI": ...,
 #    "CNI_energy": ...,
     }
