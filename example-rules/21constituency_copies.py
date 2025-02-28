@@ -24,13 +24,13 @@ def get_contact_group(contact):
 CONSTITUENCIES = {
     "network_operators":
         Organisation(name='Copy Network Operators', orgid=-1, managed='manual', sector=None, import_source='21constituency_copies.py',
-                     contacts=[Contact(email='gov@cert.example', managed='manual', email_status='enabled',
+                     contacts=[Contact(email='isp@cert.example', managed='manual', email_status='enabled',
                                        annotations=[Annotation('Format:CSV_inline', condition=Const(True)),
                                                     Annotation('Constituency:network_operators', condition=Const(True))])],
                      annotations=[]),
     "government":
         Organisation(name='Copy Government', orgid=-1, managed='manual', sector=None, import_source='21constituency_copies.py',
-                     contacts=[Contact(email='finance@cert.example', managed='manual', email_status='enabled',
+                     contacts=[Contact(email='gov@cert.example', managed='manual', email_status='enabled',
                                        annotations=[Annotation('Format:CSV_inline', condition=Const(True)),
                                                     Annotation('Constituency:government', condition=Const(True))])],
                      annotations=[]),
