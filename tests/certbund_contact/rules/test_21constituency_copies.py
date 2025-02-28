@@ -64,6 +64,147 @@ OUT_SIMPLE = Event({
     },
 })
 
+IN_MULTIPLE_SAME_ORG = Event({
+    "extra.certbund": {
+        "source_contacts": {
+            "matches": [
+                {
+                    "address": "172.16.0.0/12", "annotations": [], "field": "ip", "managed": "manual", "organisations": [0]
+                }, {
+                    "annotations": [], "field": "asn", "managed": "automatic", "organisations": [1],
+                }
+            ],
+            "organisations": [
+                {
+                    "annotations": [], "contacts": [
+                            {"annotations": [{"tag": "Constituency:government"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@example.net", "email_status": "enabled", "managed": "automatic"},
+                            {"annotations": [{"tag": "Constituency:government"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@example.com", "email_status": "enabled", "managed": "automatic"}
+                    ], "id": 0, "import_source": "ripe", "managed": "automatic", "name": "example.net", "sector": None
+                }, {
+                    "annotations": [], "contacts": [{"annotations": [{"tag": "Constituency:government"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@example.net", "email_status": "enabled", "managed": "automatic"}
+                    ], "id": 1, "import_source": "ripe", "managed": "automatic", "name": "example.net", "sector": None
+                }
+            ]
+        }
+    },
+})
+OUT_MULTIPLE_SAME_ORG = Event({
+    "extra.certbund": {
+        "source_contacts": {
+            "matches": [
+                {
+                    "address": "172.16.0.0/12", "annotations": [], "field": "ip", "managed": "manual", "organisations": [0, 2]
+                }, {
+                    "annotations": [], "field": "asn", "managed": "automatic", "organisations": [1, 3],
+                }
+            ],
+            "organisations": [
+                {
+                    "annotations": [], "contacts": [
+                            {"annotations": [{"tag": "Constituency:government"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@example.net", "email_status": "enabled", "managed": "automatic"},
+                            {"annotations": [{"tag": "Constituency:government"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@example.com", "email_status": "enabled", "managed": "automatic"}
+                    ], "id": 0, "import_source": "ripe", "managed": "automatic", "name": "example.net", "sector": None
+                }, {
+                    "annotations": [], "contacts": [{"annotations": [{"tag": "Constituency:government"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@example.net", "email_status": "enabled", "managed": "automatic"}
+                    ], "id": 1, "import_source": "ripe", "managed": "automatic", "name": "example.net", "sector": None
+                }, {
+                    "annotations": [], "contacts": [{"annotations": [{"tag": 'Format:CSV_inline', 'condition': True}, {"tag": 'Constituency:government', 'condition': True}],
+                            "email": "gov@cert.example", "email_status": "enabled", "managed": "manual"}
+                    ], "id": 2, "import_source": "21constituency_copies.py", "managed": "manual", "name": "Copy Government", "sector": None
+                }, {
+                    "annotations": [], "contacts": [{"annotations": [{"tag": 'Format:CSV_inline', 'condition': True}, {"tag": 'Constituency:government', 'condition': True}],
+                            "email": "gov@cert.example", "email_status": "enabled", "managed": "manual"}
+                    ], "id": 3, "import_source": "21constituency_copies.py", "managed": "manual", "name": "Copy Government", "sector": None
+                }
+            ]
+        }
+    },
+})
+
+IN_MULTIPLE_MULTIPLE_ORG = Event({
+    "extra.certbund": {
+        "source_contacts": {
+            "matches": [
+                {
+                    "address": "172.16.0.0/12", "annotations": [], "field": "ip", "managed": "manual", "organisations": [0]
+                }, {
+                    "annotations": [], "field": "asn", "managed": "automatic", "organisations": [1],
+                }, {
+                    "address": "172.16.0.0/20", "annotations": [], "field": "ip", "managed": "manual", "organisations": [2]
+                }
+            ],
+            "organisations": [
+                {
+                    "annotations": [], "contacts": [
+                            {"annotations": [{"tag": "Constituency:government"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@example.net", "email_status": "enabled", "managed": "automatic"}
+                    ], "id": 0, "import_source": "ripe", "managed": "automatic", "name": "example.net", "sector": None
+                }, {
+                    "annotations": [], "contacts": [{"annotations": [{"tag": "Constituency:government"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@example.net", "email_status": "enabled", "managed": "automatic"}
+                    ], "id": 1, "import_source": "ripe", "managed": "automatic", "name": "example.net", "sector": None
+                }, {
+                    "annotations": [], "contacts": [
+                            {"annotations": [{"tag": "Constituency:finance"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@finance.example", "email_status": "enabled", "managed": "automatic"}
+                    ], "id": 2, "import_source": "ripe", "managed": "automatic", "name": "finance.example", "sector": None
+                }
+            ]
+        }
+    },
+})
+OUT_MULTIPLE_MULTIPLE_ORG = Event({
+    "extra.certbund": {
+        "source_contacts": {
+            "matches": [
+                {
+                    "address": "172.16.0.0/12", "annotations": [], "field": "ip", "managed": "manual", "organisations": [0, 3]
+                }, {
+                    "annotations": [], "field": "asn", "managed": "automatic", "organisations": [1, 4],
+                }, {
+                    "address": "172.16.0.0/20", "annotations": [], "field": "ip", "managed": "manual", "organisations": [2, 5]
+                }
+            ],
+            "organisations": [
+                {
+                    "annotations": [], "contacts": [
+                            {"annotations": [{"tag": "Constituency:government"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@example.net", "email_status": "enabled", "managed": "automatic"}
+                    ], "id": 0, "import_source": "ripe", "managed": "automatic", "name": "example.net", "sector": None
+                }, {
+                    "annotations": [], "contacts": [{"annotations": [{"tag": "Constituency:government"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@example.net", "email_status": "enabled", "managed": "automatic"}
+                    ], "id": 1, "import_source": "ripe", "managed": "automatic", "name": "example.net", "sector": None
+                }, {
+                    "annotations": [], "contacts": [
+                            {"annotations": [{"tag": "Constituency:finance"}, {"tag": "Format:CSV_inline"}],
+                            "email": "abuse@finance.example", "email_status": "enabled", "managed": "automatic"}
+                    ], "id": 2, "import_source": "ripe", "managed": "automatic", "name": "finance.example", "sector": None
+                }, {
+                    "annotations": [], "contacts": [{"annotations": [{"tag": 'Format:CSV_inline', 'condition': True}, {"tag": 'Constituency:government', 'condition': True}],
+                            "email": "gov@cert.example", "email_status": "enabled", "managed": "manual"}
+                    ], "id": 3, "import_source": "21constituency_copies.py", "managed": "manual", "name": "Copy Government", "sector": None
+                }, {
+                    "annotations": [], "contacts": [{"annotations": [{"tag": 'Format:CSV_inline', 'condition': True}, {"tag": 'Constituency:government', 'condition': True}],
+                            "email": "gov@cert.example", "email_status": "enabled", "managed": "manual"}
+                    ], "id": 4, "import_source": "21constituency_copies.py", "managed": "manual", "name": "Copy Government", "sector": None
+                }, {
+                    "annotations": [], "annotations": [], "contacts": [{"annotations": [{"tag": 'Format:CSV_inline', 'condition': True}, {"tag": 'Constituency:finance', 'condition': True}],
+                            "email": "finance@cert.example", "email_status": "enabled", "managed": "manual"}
+                    ], "id": 5, "import_source": "21constituency_copies.py", "managed": "manual", "name": "Copy Finance", "sector": None
+                }
+            ]
+        }
+    },
+})
+
+
 IN_MULTIPLE = Event({
     "extra.certbund": {
         "source_contacts": {
@@ -155,6 +296,7 @@ class TestRule(unittest.TestCase):
     maxDiff = None
 
     def test_simple(self):
+        """ internal requirement source: msg5122 """
         in_context = Context(IN_SIMPLE, "source", base_logger=logging.getLogger(__name__))
         out_context = Context(OUT_SIMPLE, "source", base_logger=logging.getLogger(__name__))
         new_context = deepcopy(in_context)
@@ -162,7 +304,27 @@ class TestRule(unittest.TestCase):
         self.assertEqual(repr(new_context.organisations), repr(out_context.organisations))
         self.assertEqual(repr(new_context.matches), repr(out_context.matches))
 
-    def test_default(self):
+    def test_multiple_same_org(self):
+        """ internal requirement source: msg5126
+        Multiple contacts in one organization"""
+        in_context = Context(IN_MULTIPLE_SAME_ORG, "source", base_logger=logging.getLogger(__name__))
+        out_context = Context(OUT_MULTIPLE_SAME_ORG, "source", base_logger=logging.getLogger(__name__))
+        new_context = deepcopy(in_context)
+        constituency_copies.determine_directives(new_context)
+        self.assertEqual(repr(new_context.matches), repr(out_context.matches))
+        self.assertEqual(repr(new_context.organisations), repr(out_context.organisations))
+
+    def test_multiple_multiple_org(self):
+        """ internal requirement source: msg5142 msg5143
+        Multiple organisations with different CIDR- and AS-matches cause each a copy"""
+        in_context = Context(IN_MULTIPLE_MULTIPLE_ORG, "source", base_logger=logging.getLogger(__name__))
+        out_context = Context(OUT_MULTIPLE_MULTIPLE_ORG, "source", base_logger=logging.getLogger(__name__))
+        new_context = deepcopy(in_context)
+        constituency_copies.determine_directives(new_context)
+        self.assertEqual(repr(new_context.matches), repr(out_context.matches))
+        self.assertEqual(repr(new_context.organisations), repr(out_context.organisations))
+
+    def test_multiple(self):
         in_context = Context(IN_MULTIPLE, "source", base_logger=logging.getLogger(__name__))
         out_context = Context(OUT_MULTIPLE, "source", base_logger=logging.getLogger(__name__))
         new_context = deepcopy(in_context)

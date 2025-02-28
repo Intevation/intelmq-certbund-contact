@@ -34,7 +34,11 @@ CONSTITUENCIES = {
                                        annotations=[Annotation('Format:CSV_inline', condition=Const(True)),
                                                     Annotation('Constituency:government', condition=Const(True))])],
                      annotations=[]),
-#    "Finance": ...,
+    "finance": Organisation(name='Copy Finance', orgid=-1, managed='manual', sector=None, import_source='21constituency_copies.py',
+                     contacts=[Contact(email='finance@cert.example', managed='manual', email_status='enabled',
+                                       annotations=[Annotation('Format:CSV_inline', condition=Const(True)),
+                                                    Annotation('Constituency:finance', condition=Const(True))])],
+                     annotations=[]),
 #    "CNI": ...,
 #    "CNI_energy": ...,
     }
