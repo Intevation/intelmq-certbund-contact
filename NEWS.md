@@ -6,6 +6,10 @@ additional manual steps are needed.  These are documented here.
 If installing from scratch, please refer to README.md for the
 necessary steps.
 
+## Update to 1.2.0
+
+The minimum required Python version is 3.10.
+
 ## Update to 1.0.3
 
 The Version 1.0.3 adds an audit log table for [Fody](github.com/Intevation/intelmq-fody-backend) version 0.9.3.

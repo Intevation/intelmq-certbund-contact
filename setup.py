@@ -23,7 +23,7 @@ setup(
     version="1.2.0",
     maintainer='Intevation GmbH',
     maintainer_email='sebastian.wagner@intevation.de',
-    python_requires='>=3.4',
+    python_requires='>=3.10',
     install_requires=REQUIRES,
     packages=find_packages("."),
     description=('IntelMQ Contacts is a contact database for IntelMQ'
