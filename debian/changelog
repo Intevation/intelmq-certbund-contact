@@ -16,8 +16,9 @@ intelmq-certbund-contact (1.2.0-1) UNRELEASED; urgency=medium
   * scripts: expire rules: add default user to help
   * documentation: Fix/update postgres setup
   * Fix error loading RIPE data #24
+  * Parse non-standard e-mail address formats in abuse-mailbox fields
 
- -- Sebastian Wagner <swagner@intevation.de>  Fri, 17 Jan 2025 12:20:32 +0100
+ -- Sebastian Wagner <swagner@intevation.de>  Wed, 05 Mar 2025 14:29:32 +0100
 
 intelmq-certbund-contact (1.1.0-1) stable; urgency=medium
 

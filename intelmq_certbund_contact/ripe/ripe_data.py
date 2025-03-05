@@ -28,6 +28,8 @@ import itertools
 import gzip
 import ipaddress
 
+from email.utils import getaddresses
+
 
 def add_db_args(parser):
     parser.add_argument("--conninfo",
@@ -621,6 +623,13 @@ def sanitize_role_entry(entry):
     """
     entry = entry.copy()
     entry["nic-hdl"] = [handle.upper() for handle in entry["nic-hdl"]]
+
+    if 'abuse-mailbox' in entry:
+        # extract email addresses using email.utils.parseaddr
+        # role contained also multiple addresses in the past, this is no longer the case as od 2025-03-05
+        # getaddresses may return the same email address twice if the address is in display name format, therefore make a list of a set
+        # sort the list of addresses for reproducability and consistency
+        entry['abuse-mailbox'] = sorted({address for _, address in getaddresses(entry['abuse-mailbox'], strict=False)})
     return entry
 
 
