@@ -3,7 +3,7 @@ Maintainer: Sebastian Wagner <sebastian.wagner@intevation.de>
 Section: contrib/net
 Priority: optional
 Build-Depends: dh-python, python3-all, debhelper (>= 9), quilt, python3-setuptools
-X-Python3-Version: >= 3.3
+X-Python3-Version: >= 3.10
 Standards-Version: 3.9.7
 Homepage: https://github.com/Intevation/intelmq-certbund-contact
 

@@ -17,6 +17,7 @@ intelmq-certbund-contact (1.2.0-1) UNRELEASED; urgency=medium
   * documentation: Fix/update postgres setup
   * Fix error loading RIPE data #24
   * Parse non-standard e-mail address formats in abuse-mailbox fields
+  * Raise the minimum required python version to 3.10.
 
  -- Sebastian Wagner <swagner@intevation.de>  Wed, 05 Mar 2025 14:29:32 +0100
 
