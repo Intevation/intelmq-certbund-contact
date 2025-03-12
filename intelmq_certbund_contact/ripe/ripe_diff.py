@@ -78,7 +78,8 @@ def build_organisation_objects(asn_list, inetnum_list, inet6num_list,
             unattached_roles.append(role)
         else:
             for org_handle in role_orgs:
-                orgs[org_handle].contacts.append(role['abuse-mailbox'][0])
+                for email in role['abuse-mailbox']:
+                    orgs[org_handle].contacts.append(email)
 
     return orgs, unattached_as, unattached_roles
 

@@ -168,21 +168,15 @@ def insert_new_contact_entries(cur, role_list, abusec_to_org, mapping, verbose):
 
         nic_hdl = entry['nic-hdl'][0]
 
-        # abuse-mailbox: could be type LIST or occur multiple time
-        # TODO: Check if we can handle LIST a@example, b@example
-        email = entry['abuse-mailbox'][0]
-        # For multiple lines: As not seen in ftp bulk data,
-        # we only record if it happens as WARNING for now
-        if len(entry['abuse-mailbox']) > 1:
-            print('Role with nic-hdl {} has two '
-                  'abuse-mailbox lines. Taking the first.'.format(nic_hdl))
-
-        for orh in abusec_to_org[nic_hdl]:
-            cur.execute("""INSERT INTO contact_automatic
-                                       (email, organisation_automatic_id,
-                                        import_source, import_time)
-                           VALUES (%s, %s, %s, CURRENT_TIMESTAMP)""",
-                        (email, mapping[orh]['org_id'], SOURCE_NAME))
+        # abuse-mailbox: could be type LIST or occur multiple times
+        # Does not occur in data and is forbidden by RIPE, but needs to be handled correctly (2auto/issue91)
+        for email in entry['abuse-mailbox']:
+            for orh in abusec_to_org[nic_hdl]:
+                cur.execute("""INSERT INTO contact_automatic
+                                        (email, organisation_automatic_id,
+                                            import_source, import_time)
+                            VALUES (%s, %s, %s, CURRENT_TIMESTAMP)""",
+                            (email, mapping[orh]['org_id'], SOURCE_NAME))
 
 
 def main():
