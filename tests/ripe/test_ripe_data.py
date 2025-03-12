@@ -15,11 +15,11 @@ from intelmq.lib.message import Event
 
 from intelmq_certbund_contact.ripe import ripe_data
 
-# from importlib.machinery import SourceFileLoader
-# constituency_copies = SourceFileLoader("module.name", f"{dirname(__file__)}/../../../example-rules/21constituency_copies.py").load_module()
-
 
 class TestRipeData(unittest.TestCase):
+    """
+    Some special cases in RIPE data parsing (2auto/issue91 and 2auto/issue354)
+    """
 
     maxDiff = None
 
@@ -29,7 +29,7 @@ class TestRipeData(unittest.TestCase):
             ("role", "nic-hdl", "abuse-mailbox", "org"),
             verbose=True,
         )
-        sanitized = ripe_data.sanitize_role_list(role_list)
+        sanitized = [dict(element) for element in ripe_data.sanitize_role_list(role_list)]
         self.assertEqual(
             sanitized,
             [
@@ -54,7 +54,7 @@ class TestRipeData(unittest.TestCase):
             ("role", "nic-hdl", "abuse-mailbox", "org"),
             verbose=True,
         )
-        sanitized = ripe_data.sanitize_role_list(role_list)
+        sanitized = [dict(element) for element in ripe_data.sanitize_role_list(role_list)]
         self.assertEqual(
             sanitized,
             [
@@ -85,7 +85,7 @@ class TestRipeData(unittest.TestCase):
             ("role", "nic-hdl", "abuse-mailbox", "org"),
             verbose=True,
         )
-        sanitized = ripe_data.sanitize_role_list(role_list)
+        sanitized = [dict(element) for element in ripe_data.sanitize_role_list(role_list)]
         self.assertEqual(
             sanitized,
             [
@@ -109,7 +109,7 @@ class TestRipeData(unittest.TestCase):
             ("role", "nic-hdl", "abuse-mailbox", "org"),
             verbose=True,
         )
-        sanitized = ripe_data.sanitize_role_list(role_list)
+        sanitized = [dict(element) for element in ripe_data.sanitize_role_list(role_list)]
         self.assertEqual(
             sanitized,
             [
@@ -137,8 +137,7 @@ class TestRipeData(unittest.TestCase):
             ("role", "nic-hdl", "abuse-mailbox", "org"),
             verbose=True,
         )
-        sanitized = ripe_data.sanitize_role_list(role_list)
-        sanitized[0] = dict(sanitized[0])
+        sanitized = [dict(element) for element in ripe_data.sanitize_role_list(role_list)]
         self.assertEqual(
             sanitized,
             [
