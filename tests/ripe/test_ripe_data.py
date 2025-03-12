@@ -144,8 +144,13 @@ class TestRipeData(unittest.TestCase):
             [
                 {
                     "abuse-mailbox": ['abuse@example.com', 'abuse@example.net'],
-                    "nic-hdl": ["DUMY-RIPE"],
-                    "role": ["Non-existing contact"],
+                    "nic-hdl": ["DUMY1-RIPE"],
+                    "role": ["Non-existing contact 1"],
+                },
+                {
+                    "abuse-mailbox": ['abuse@example.com', 'abuse@example.net'],
+                    "nic-hdl": ["DUMY2-RIPE"],
+                    "role": ["Non-existing contact 2 with comma"],
                 },
             ],
         )

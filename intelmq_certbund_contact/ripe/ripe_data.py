@@ -628,8 +628,10 @@ def sanitize_role_entry(entry):
         # extract email addresses using email.utils.parseaddr
         # role contained also multiple addresses in the past, this is no longer the case as od 2025-03-05
         # getaddresses may return the same email address twice if the address is in display name format, therefore make a list of a set
+        # getaddresses does not detect email addresses separated by a simple whitespace, so replace it with a comma
+        # getaddresses may return empty strings, so filter out zero-length strings
         # sort the list of addresses for reproducability and consistency
-        entry['abuse-mailbox'] = sorted({address for _, address in getaddresses(entry['abuse-mailbox'], strict=False)})
+        entry['abuse-mailbox'] = list(filter(len, sorted({address for _, address in getaddresses([element.replace(' ', ', ') for element in entry['abuse-mailbox']], strict=False)})))
     return entry
 
 
