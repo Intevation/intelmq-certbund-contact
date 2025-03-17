@@ -79,6 +79,8 @@ class TestRipeData(unittest.TestCase):
         abuse-mailbox:  N&INetworkOperations@homeoffice.gov.uk
         abuse-mailbox:  sdm.n&c@frieslandcampina.com
         abuse-mailbox:  kevino'connor@merseyfire.gov.uk
+        No examples in RIPE data, but allowed: whitespaces in the local part
+        abuse-mailbox:  "foo bar"@example.com
         """
         role_list = ripe_data.parse_file(
             f"{dirname(__file__)}/role_special_characters.txt.gz",
@@ -94,6 +96,11 @@ class TestRipeData(unittest.TestCase):
                     "nic-hdl": ["AR19875-RIPE"],
                     "role": ["Abuse-C Role"],
                     'org': ['ORG-EFHB1-RIPE'],
+                },
+                {
+                    "abuse-mailbox": ['"abuse contact"@example.com'],
+                    "nic-hdl": ["DUMY1-RIPE"],
+                    "role": ["Non-existing contact with white space"],
                 },
             ],
         )
@@ -131,6 +138,9 @@ class TestRipeData(unittest.TestCase):
         """
         There are no examples in RIPE data as of 2025-03-05 but it should still be parseable:
         abuse-mailbox:  abuse@example.com abuse@example.net
+        abuse-mailbox:  abuse@example.com, abuse@example.net
+        One address with whitespace in local part and also a second address separated by a white space:
+        abuse-mailbox:  "abuse contact"@example.com abuse@example.com
         """
         role_list = ripe_data.parse_file(
             f"{dirname(__file__)}/role_multiple_addresses.txt.gz",
@@ -150,6 +160,11 @@ class TestRipeData(unittest.TestCase):
                     "abuse-mailbox": ['abuse@example.com', 'abuse@example.net'],
                     "nic-hdl": ["DUMY2-RIPE"],
                     "role": ["Non-existing contact 2 with comma"],
+                },
+                {
+                    "abuse-mailbox": ['"abuse contact"@example.com', 'abuse@example.com'],
+                    "nic-hdl": ["DUMY3-RIPE"],
+                    "role": ["Non-existing contacts with white-space"],
                 },
             ],
         )

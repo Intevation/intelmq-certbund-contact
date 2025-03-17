@@ -28,7 +28,15 @@ import itertools
 import gzip
 import ipaddress
 
+from re import compile as re_compile
+from itertools import chain
+
 from email.utils import getaddresses
+
+
+# Basic regular expression pattern for email addresses. Local part can either be quoted or it must not contain spaces.
+# More reasoning in function sanitize_role_entry and in 2auto/issue354
+RE_EMAIL_ADDRESS = re_compile('((".*?"|[^ ]+)@[^ ]+)')
 
 
 def add_db_args(parser):
@@ -626,12 +634,20 @@ def sanitize_role_entry(entry):
 
     if 'abuse-mailbox' in entry:
         # extract email addresses using email.utils.parseaddr
-        # role contained also multiple addresses in the past, this is no longer the case as od 2025-03-05
-        # getaddresses may return the same email address twice if the address is in display name format, therefore make a list of a set
-        # getaddresses does not detect email addresses separated by a simple whitespace, so replace it with a comma
+        # role contained also multiple addresses in the past, this is no longer the case and forbidden as of 2025-03-05
+        # needs to be handled anyway (2auto/issue354)
+        # getaddresses may return the same email address twice if the address is in display name format, therefore use a set
+        # getaddresses does not detect email addresses separated by a simple whitespace, so use a simple regular expression to first find all strings looking like an email address
+        # the regular expression is necessary to handle special cases like:
+        # abuse-mailbox: "abuse contact"@example.com abuse@example.com
+        # lines with multiple addresses containing white spaces in the email addresses
         # getaddresses may return empty strings, so filter out zero-length strings
         # sort the list of addresses for reproducability and consistency
-        entry['abuse-mailbox'] = list(filter(len, sorted({address for _, address in getaddresses([element.replace(' ', ', ') for element in entry['abuse-mailbox']], strict=False)})))
+        entry['abuse-mailbox'] = [address for address in
+                                  sorted({address for _, address in
+                                          getaddresses(chain.from_iterable([[finding[0] for finding in RE_EMAIL_ADDRESS.findall(element)] for element in entry['abuse-mailbox']]),
+                                                      strict=False)})
+                                  if len(address)]
     return entry
 
 
