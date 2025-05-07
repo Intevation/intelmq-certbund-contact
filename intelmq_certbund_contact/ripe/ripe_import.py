@@ -192,6 +192,15 @@ def main():
 
     args = parser.parse_args()
 
+    try:
+        con = psycopg2.connect(dsn=args.conninfo)
+        cur = con.cursor()
+    except Exception as exc:
+        print(f'Error connecting to database: {exc}', file=sys.stderr)
+        sys.exit(1)
+    else:
+        con.close()
+
     if args.verbose:
         print('Parsing RIPE database...')
         print('------------------------')
