@@ -84,6 +84,24 @@ class TestCERTBundRuleExpertBot(test.BotTestCase, unittest.TestCase):
         self.run_bot()
         self.assertMessageEqual(0, NON_EMPTY_CERTBUND_EXAMPLE_OUTPUT)
 
+    def test_nonexisting_script_directory(self):
+        self.allowed_warning_count = 0
+        # not a directory
+        with self.assertRaisesRegex(ValueError, expected_regex='.*is not a directory or cannot be read.*'):
+            self.run_bot(parameters={'script_directory': '/dev/null'})
+        # missing read permissions
+        with self.assertRaisesRegex(ValueError, expected_regex='.*is not a directory or cannot be read.*'):
+            self.run_bot(parameters={'script_directory': '/root/.ssh/'})
+
+    def test_empty_script_directory(self):
+        """ Empty dir should give a warning, message should be passed through """
+        self.allowed_warning_count = 1  # No rules loaded
+        self.input_message = SOURCE_CONTACTS_EXAMPLE_OUTPUT
+        with TemporaryDirectory() as tempdir:
+            self.run_bot(parameters={'script_directory': tempdir})
+        self.assertMessageEqual(0, SOURCE_CONTACTS_EXAMPLE_OUTPUT)
+        self.assertLogMatches('No rules loaded\.', 'WARNING')
+
 
 if __name__ == "__main__":
     unittest.main()
