@@ -15,9 +15,28 @@ from psycopg2.extras import Json
 from psycopg2.extensions import register_adapter
 register_adapter(dict, Json)
 
-SQL_GET_EXPIRED_ANNOTATIONS = """
-    SELECT {table}_annotation_id, {index}, annotation FROM {table}_annotation
+SQL_GET_EXPIRED_ANNOTATIONS_ORGANISATION = """
+    SELECT {table}_annotation_id, {index}, annotation, name as organisation_name FROM {table}_annotation
+    NATURAL JOIN organisation
     WHERE (annotation ->> 'expires')::date < {timespec} %s AND annotation ->> 'expires' IS NOT NULL AND annotation ->> 'expires' != ''""".replace('\n    ', ' ')
+SQL_GET_EXPIRED_ANNOTATIONS_ASN = """
+    SELECT {table}_annotation_id, {index}, annotation, organisation.name as organisation_name FROM {table}_annotation
+    NATURAL JOIN organisation_to_asn
+    NATURAL JOIN organisation
+    WHERE (annotation ->> 'expires')::date < {timespec} %s AND annotation ->> 'expires' IS NOT NULL AND annotation ->> 'expires' != ''""".replace('\n    ', ' ')
+SQL_GET_EXPIRED_ANNOTATIONS_NETWORK_FQDN = """
+    SELECT {table}_annotation_id, {index}, annotation, organisation.name as organisation_name FROM {table}_annotation
+    NATURAL JOIN organisation_to_{table}
+    NATURAL JOIN organisation
+    WHERE (annotation ->> 'expires')::date < {timespec} %s AND annotation ->> 'expires' IS NOT NULL AND annotation ->> 'expires' != ''""".replace('\n    ', ' ')
+
+SQL_GET_EXPIRED_ANNOTATIONS = {
+    'organisation': SQL_GET_EXPIRED_ANNOTATIONS_ORGANISATION,
+    'autonomous_system': SQL_GET_EXPIRED_ANNOTATIONS_ASN,
+    'network': SQL_GET_EXPIRED_ANNOTATIONS_NETWORK_FQDN,
+    'fqdn': SQL_GET_EXPIRED_ANNOTATIONS_NETWORK_FQDN,
+}
+
 SQL_DELETE_ANNOTATION = """
     DELETE FROM {table}_annotation
     WHERE {table}_annotation_id = %s""".replace('\n    ', ' ')
@@ -82,14 +101,14 @@ def main():
         with conn.cursor() as cur:
             for table in ('organisation', 'autonomous_system', 'network', 'fqdn'):
                 print(f'Processing {table}_annotation')
-                select_query = SQL_GET_EXPIRED_ANNOTATIONS.format(table=table, index=TABLE_TO_INDEX[table], timespec='CURRENT_DATE - INTERVAL' if time_is_relative else '')
+                select_query = SQL_GET_EXPIRED_ANNOTATIONS[table].format(table=table, index=TABLE_TO_INDEX[table], timespec='CURRENT_DATE - INTERVAL' if time_is_relative else '')
                 if args.verbose >= 2:
                     print(cur.mogrify(select_query, (args.age, )).decode())
                 cur.execute(select_query, (args.age, ))
                 for expired_anno in cur.fetchall():
-                    anno_id, foreign_id, annotation = expired_anno
+                    anno_id, foreign_id, annotation, organisation_name = expired_anno
                     if args.verbose:
-                        print(f'Deleting expired {table} (ID {foreign_id}) annotation {annotation!r}, ID {anno_id}')
+                        print(f'Deleting expired {table} (Object ID {foreign_id}) annotation {annotation!r}, Annotation ID {anno_id}. Part of Organisation {organisation_name!r}')
                     if args.verbose >= 2:
                         print(cur.mogrify(SQL_DELETE_ANNOTATION.format(table=table), (anno_id, )).decode())
                         print(cur.mogrify(SQL_AUDIT_LOG.format(table=table),
