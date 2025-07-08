@@ -59,7 +59,7 @@ def main():
         Setting the age to '1 day' on 2025-07-08 deletes all tags that are expired before 2025-07-07: on 2025-07-06 or earlier.
         '''))
     parser.add_argument('-v', '--verbose', action='count', default=0)
-    parser.add_argument('-n', '--dry-run', action='store_true')
+    parser.add_argument('-n', '--dry-run', action='store_true', help='Verbose output. Set twice to show the SQL commands')
     parser.add_argument('age', help="Either a Postgres-parseable date interval, for example '1 month' or an absolute date, formatted %%Y-%%m-%%d '2020-01-01'.")
     parser.add_argument('-u', '--audit-log-user', default=DEFAULT_AUDIT_LOG_USER,
                         help=f'The username to appear in the audit log for deleting the expired annotations. Default: {DEFAULT_AUDIT_LOG_USER}')
@@ -73,6 +73,9 @@ def main():
         time_is_relative = False
     if args.verbose:
         print(f'Given time specifier is relative: {time_is_relative}')
+
+    if args.dry_run:
+        print('Dry mode active (simulation only).')
 
     from contactdb_api.contactdb_api.serve import read_configuration
     with psycopg2.connect(dsn=read_configuration()["libpg conninfo"]) as conn:
