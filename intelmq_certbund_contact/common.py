@@ -253,7 +253,7 @@ def lookup_contacts(cur, managed, asn, ip, fqdn, country_code):
 
     org_result = cur.fetchone()
     return {"organisations": maybe_parse_json(org_result[0]),
-            "matches": (maybe_parse_json(org_result[1]) +
-                        maybe_parse_json(org_result[2]) +
-                        maybe_parse_json(org_result[3]) +
-                        maybe_parse_json(org_result[4]))}
+            "matches": (maybe_parse_json(org_result[1]) +  # ASN
+                        maybe_parse_json(org_result[2]) +  # FQDN
+                        maybe_parse_json(org_result[3]) +  # CIDR
+                        maybe_parse_json(org_result[4]))}  # CC
