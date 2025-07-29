@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 
 REQUIRES = [
     'intelmq>=3.0.2',
-    'psycopg2',
+    'psycopg2-binary',
     'intelmqmail',
 ]
 
