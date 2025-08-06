@@ -4,6 +4,44 @@ Part of the [intelmq-cb-mailgen solution](https://github.com/Intevation/intelmq-
 
 An overview of the setup can be gained from the [IntelMQ Mailgen Docs](http://intevation.github.io/intelmq-mailgen/).
 
+This component contains
+- **CERT-Bund Contact Expert**: the IntelMQ expert bot which fetches the information from the contact database
+- **CERT-Bund Rules Expert**: the IntelMQ expert bot which processes the contacts and annotations based on the rules
+- **the contact database definition** to setup the contact database in PostgreSQL
+- common Python libraries which are also used by the [mailgen](https://github.com/Intevation/intelmq-mailgen/) component
+
+## Installation
+
+As [with IntelMQ itself](https://docs.intelmq.org/latest/admin/installation/linux-packages/), you can install this component with deb-packages or from PyPI.
+
+The setup of the database remains a manual step.
+
+### Linux packages
+
+Add the IntelMQ repositories as shown in IntelMQ's documentation:
+[IntelMQ: Installation as Linux package](https://docs.intelmq.org/latest/admin/installation/linux-packages/).
+
+Then, install the package from there:
+```bash
+apt install intelmq-certbund-contact
+```
+
+Alternatively to IntelMQ's APT repositories, you can also use Intevation's own APT repository for Ubuntu 22.04 Jammy:
+```
+curl -fsSL https://ssl.intevation.de/Intevation-Distribution-Key-2021.asc | sudo tee /etc/apt/keyrings/intevation.de.gpg > /dev/null
+echo 'deb [signed-by=/etc/apt/keyrings/apt.intevation.de.asc] http://apt.intevation.de/ jammy intelmq-testing' | sudo tee /etc/apt/sources.list.d/intelmq.list
+```
+
+### PyPI
+
+Install the package with:
+
+```bash
+pip3 install intelmq-certbund-contact
+```
+
+For more information on IntelMQ's base requirements, IntelMQ system paths and virtual enviroments, head over to [IntelMQ: Installation from PyPI](https://docs.intelmq.org/latest/admin/installation/pypi/).
+
 ## Contact DB
 
 ### Automatic versus manual contacts
