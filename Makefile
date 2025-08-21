@@ -1,7 +1,7 @@
 .PHONY: tests lint
 
 tests:
-	PYTHONPATH=. pytest tests/
+	PYTHONPATH=. python3 -m pytest tests/
 
 lint:
 	# Python syntax errors or undefined names
