@@ -10,6 +10,12 @@ This component contains
 - **the contact database definition** to setup the contact database in PostgreSQL
 - common Python libraries which are also used by the [mailgen](https://github.com/Intevation/intelmq-mailgen/) component
 
+## Requirements
+- `psycopg2` for accessing PostgreSQL
+- `intelmqmail`, also known as "mailgen"
+- `intelmq>=3.0.2`
+- Python 3.10.15, 3.11.10, 3.12.6 or a version with the patch for CVE-2023-27043 (which includes for example Python 3.10.12 on Ubuntu 22.04), see [52f0205c47597d5428c4f2c0f922ed460a7e6697](https://github.com/Intevation/intelmq-certbund-contact/commit/52f0205c47597d5428c4f2c0f922ed460a7e6697) and [607cc98c81254e6b4fcab32e861f31a1811d6a2e](https://github.com/Intevation/intelmq-certbund-contact/commit/607cc98c81254e6b4fcab32e861f31a1811d6a2e).
+
 ## Installation
 
 As [with IntelMQ itself](https://docs.intelmq.org/latest/admin/installation/linux-packages/), you can install this component with deb-packages or from PyPI.
