@@ -5,10 +5,10 @@ Part of the [intelmq-cb-mailgen solution](https://github.com/Intevation/intelmq-
 An overview of the setup can be gained from the [IntelMQ Mailgen Docs](http://intevation.github.io/intelmq-mailgen/).
 
 This component contains
-- **CERT-Bund Contact Expert**: the IntelMQ expert bot which fetches the information from the contact database
-- **CERT-Bund Rules Expert**: the IntelMQ expert bot which processes the contacts and annotations based on the rules
-- **the contact database definition** to setup the contact database in PostgreSQL
-- common Python libraries which are also used by the [mailgen](https://github.com/Intevation/intelmq-mailgen/) component
+- **CERT-Bund Contact Expert**: the IntelMQ expert bot which fetches the information from the contact database see https://intevation.github.io/intelmq-mailgen/concept.html#contact-db-bot
+- **CERT-Bund Rules Expert**: the IntelMQ expert bot which processes the contacts and annotations based on the rules, see https://intevation.github.io/intelmq-mailgen/concept.html#rule-expert-bot
+- **the contact database definition** to setup the contact database in PostgreSQL. See documentation below
+- Tools to process and import RIPE data to the contact database, see [README-ripe-import.md](README-ripe-import.md)
 
 ## Requirements
 - `psycopg2` for accessing PostgreSQL
