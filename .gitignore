@@ -8,3 +8,5 @@
 dist/
 intelmq_certbund_contact.egg-info/
 build/
+# Python venv
+venv/
