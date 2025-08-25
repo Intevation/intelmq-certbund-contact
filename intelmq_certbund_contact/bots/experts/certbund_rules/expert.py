@@ -34,7 +34,7 @@ except ImportError as err:
 
 from intelmq.lib.bot import ExpertBot
 from intelmq_certbund_contact.rulesupport import Context
-from intelmq_certbund_contact.eventjson import del_certbund_contacts
+from intelmq_certbund_contact.eventjson import del_certbund_contacts, get_certbund_directives, del_certbund_directives
 
 
 class CERTBundRuleExpertBot(ExpertBot):
@@ -74,6 +74,8 @@ class CERTBundRuleExpertBot(ExpertBot):
                     break
             if self.remove_contact_data:
                 del_certbund_contacts(event, section)
+            if not get_certbund_directives(event, section):
+                del_certbund_directives(event, section)
 
         self.send_message(event)
         self.acknowledge_message()
