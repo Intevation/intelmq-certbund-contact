@@ -54,6 +54,8 @@ def del_certbund_field(event, key):
     if certbund is not None and key in certbund:
         del certbund[key]
     event.add("extra", extra, overwrite=True)
+    if certbund is not None and not certbund:
+        del event["extra.certbund"]
 
 
 def get_certbund_field(event):
