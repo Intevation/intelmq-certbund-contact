@@ -34,10 +34,7 @@ EMPTY_SOURCE_DIRECTIVES_EXAMPLE_INPUT = {
     "extra.certbund": {"source_directives": []},
     }
 
-EMPTY_SOURCE_DIRECTIVES_EXAMPLE_OUTPUT = {
-    "__type": "Event",
-    "comment": "foobar",
-    }
+EMPTY_SOURCE_DIRECTIVES_EXAMPLE_OUTPUT = SOURCE_CONTACTS_EXAMPLE_OUTPUT
 
 NON_EMPTY_CERTBUND_EXAMPLE_INPUT = {
     "__type": "Event",
@@ -65,12 +62,19 @@ class TestCERTBundRuleExpertBot(test.BotTestCase, unittest.TestCase):
     def tearDownClass(cls):
         cls.temp_rules_dir.cleanup()
 
-    def test_source_contacts(self):
+    def test_remove_source_contacts(self):
+        """ Should remove source_contacts """
         self.input_message = SOURCE_CONTACTS_EXAMPLE_INPUT
         self.run_bot()
         self.assertMessageEqual(0, SOURCE_CONTACTS_EXAMPLE_OUTPUT)
 
-    def test_empty_source_directives(self):
+    def test_not_remove_source_contacts(self):
+        """ Should not remove source_contacts with remove_contact_data False """
+        self.input_message = SOURCE_CONTACTS_EXAMPLE_INPUT
+        self.run_bot(parameters={'remove_contact_data': False})
+        self.assertMessageEqual(0, SOURCE_CONTACTS_EXAMPLE_INPUT)
+
+    def test_remove_empty_source_directives(self):
         self.input_message = EMPTY_SOURCE_DIRECTIVES_EXAMPLE_INPUT
         self.run_bot()
         self.assertMessageEqual(0, EMPTY_SOURCE_DIRECTIVES_EXAMPLE_OUTPUT)
