@@ -51,9 +51,13 @@ def set_certbund_field(event, key, value):
 def del_certbund_field(event, key):
     extra = get_parsed_extra_field(event)
     certbund = extra.get("certbund")
-    if certbund is not None and key in certbund:
-        del certbund[key]
-    event.add("extra", extra, overwrite=True)
+    if certbund is None or key not in certbund:
+        return
+    del certbund[key]
+    if certbund:
+        event.add("extra", extra, overwrite=True)
+    else:
+        del event["extra.certbund"]
 
 
 def get_certbund_field(event):
@@ -84,3 +88,7 @@ def set_certbund_directives(event, section, directives):
 
 def get_certbund_directives(event, section):
     return get_certbund_field(event).get(directives_key(section), [])
+
+
+def del_certbund_directives(event, section):
+    del_certbund_field(event, directives_key(section))
