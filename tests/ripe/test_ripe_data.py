@@ -169,6 +169,27 @@ class TestRipeData(unittest.TestCase):
             ],
         )
 
+    def test_email_case(self):
+        """
+        Convert all email adresses to lower case
+        """
+        role_list = ripe_data.parse_file(
+            f"{dirname(__file__)}/role_uppercase.txt.gz",
+            ("role", "nic-hdl", "abuse-mailbox", "org"),
+            verbose=True,
+        )
+        sanitized = [dict(element) for element in ripe_data.sanitize_role_list(role_list)]
+        self.assertEqual(
+            sanitized,
+            [
+                {
+                    "abuse-mailbox": ["null@example.com"],
+                    "nic-hdl": ["ACRO6281-RIPE"],
+                    "role": ["Null"],
+                },
+            ],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
