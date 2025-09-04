@@ -5,7 +5,7 @@ set -e
 d=`date +%F`
 mkdir $d
 cd $d
-for db in ripe.db.organisation.gz ripe.db.role.gz ripe.db.aut-num.gz ripe.db.inet6num.gz ripe.db.inetnum.gz
+for db in ripe.db.organisation.gz ripe.db.role.gz ripe.db.aut-num.gz ripe.db.inet6num.gz ripe.db.inetnum.gz ripe.db.route.gz ripe.db.route6.gz
  do
  echo "Downloading: " $db
  curl -O "https://ftp.ripe.net/ripe/dbase/split/$db"

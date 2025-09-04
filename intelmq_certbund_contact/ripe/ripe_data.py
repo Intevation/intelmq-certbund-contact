@@ -64,6 +64,14 @@ def add_common_args(parser):
     parser.add_argument("--inet6num-file",
                         default='ripe.db.inet6num.gz',
                         help=("Specify the inet6num data file."))
+    parser.add_argument("--route-file",
+                        default='ripe.db.route.gz',
+                        help=("Specify the route data file."))
+    parser.add_argument("--route6-file",
+                        default='ripe.db.route6.gz',
+                        help=("Specify the route6 data file."))
+    parser.add_argument("--import-route-data", action='store_true',
+                        help=("Whether to import/diff the route data."))
     parser.add_argument("--ripe-delegated-file",
                         default='delegated-ripencc-latest',
                         help=("Name of the delegated-ripencc-latest file to"
@@ -90,7 +98,7 @@ def load_ripe_files(options) -> tuple:
 
     Returns:
         tuple of (asn_list, organisation_list, role_list, abusec_to_org,
-                  inetnum_list, inet6num_list)
+                  inetnum_list, inet6num_list, route_list, route6_list)
     """
 
     # Step 1: read all files
@@ -131,6 +139,16 @@ def load_ripe_files(options) -> tuple:
                            ('role', 'nic-hdl', 'abuse-mailbox', 'org'),
                            verbose=options.verbose)
     role_index = build_index(role_list, 'nic-hdl')
+
+    route_list = []
+    route6_list = []
+    if options.import_route_data:
+        route_list = parse_file(options.route_file,
+                                ('route', 'origin'),
+                                verbose=options.verbose)
+        route6_list = parse_file(options.route6_file,
+                                 ('route6', 'origin'),
+                                 verbose=options.verbose)
 
     # Step 2: Prepare new data for insertion
 
@@ -175,7 +193,7 @@ def load_ripe_files(options) -> tuple:
 
 
     return (asn_list, organisation_list, role_list, abusec_to_org,
-            inetnum_list, inet6num_list)
+            inetnum_list, inet6num_list, route_list, route6_list)
 
 
 def read_delegated_file(filename, country, verbose=False):
