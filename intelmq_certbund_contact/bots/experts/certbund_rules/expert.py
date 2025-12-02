@@ -32,6 +32,7 @@ except ImportError as err:
     else:
         raise
 
+from intelmq import VAR_STATE_PATH
 from intelmq.lib.bot import ExpertBot
 from intelmq_certbund_contact.rulesupport import Context
 from intelmq_certbund_contact.eventjson import del_certbund_contacts, get_certbund_directives, del_certbund_directives
@@ -39,7 +40,7 @@ from intelmq_certbund_contact.eventjson import del_certbund_contacts, get_certbu
 
 class CERTBundRuleExpertBot(ExpertBot):
 
-    script_directory: str = "/opt/intelmq/var/lib/bots/notification_rules"
+    script_directory: str = f"{VAR_STATE_PATH}notification_rules"
     remove_contact_data: bool = True
     sections: str = "source"
 
