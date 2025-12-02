@@ -20,6 +20,12 @@ intelmq-certbund-contact (1.2.0-1) UNRELEASED; urgency=medium
   * Raise the minimum required python version to 3.10.
   * Add ERD (pgadmin) file for database design visualization.
   * RIPE import: validate the db connection credentials before loading the data for faster feedback to the user
+  * rules expert:
+    * use the systems default path for configuration
+  * rulesupport:
+    * Add repr methods to Organisation and Contact classes
+  * packages:
+    * include example rules in documentation
 
  -- Sebastian Wagner <swagner@intevation.de>  Wed, 05 Mar 2025 14:29:32 +0100
 

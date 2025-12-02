@@ -306,7 +306,7 @@ class TestRule(unittest.TestCase):
 
     def test_multiple_same_org(self):
         """ internal requirement source: msg5126
-        Multiple contacts in one organization"""
+        Multiple contacts in one organisation"""
         in_context = Context(IN_MULTIPLE_SAME_ORG, "source", base_logger=logging.getLogger(__name__))
         out_context = Context(OUT_MULTIPLE_SAME_ORG, "source", base_logger=logging.getLogger(__name__))
         new_context = deepcopy(in_context)

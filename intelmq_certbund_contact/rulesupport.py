@@ -65,6 +65,14 @@ class Organisation:
                 % (self.orgid, self.name, self.managed, self.import_source,
                    self.sector, self.contacts, self.annotations))
 
+    def __eq__(self, other):
+        print('Organisation.__eq__', (self.orgid == other.orgid,  self.name == other.name, self.managed == other.managed,
+                self.import_source == other.import_source, self.sector == other.sector, self.contacts == other.contacts,
+                self.annotations == other.annotations))
+        return (self.orgid == other.orgid and self.name == other.name and self.managed == other.managed and
+                self.import_source == other.import_source and self.sector == other.sector and self.contacts == other.contacts and
+                self.annotations == other.annotations)
+
     @classmethod
     def from_json(cls, jsondict):
         return cls(orgid=jsondict["id"],
@@ -123,6 +131,10 @@ class Contact:
         return ("Contact(email=%r, managed=%r, email_status=%r, annotations=%r)"
                 % (self.email, self.managed, self.email_status,
                    self.annotations))
+
+    def __eq__(self, other):
+        return (self.email == other.email and self.managed == other.managed and self.email_status == other.email_status and
+                self.annotations == other.annotations)
 
     @classmethod
     def from_json(cls, jsondict):

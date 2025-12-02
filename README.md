@@ -230,9 +230,9 @@ Add a contact:
 -- 1. Prepare contact information
 
   \set asn 3320
-  -- unique name of the organization:
+  -- unique name of the organisation:
   \set org_name 'org1'
-  \set org_comment 'Example comment on organization.'
+  \set org_comment 'Example comment on organisation.'
   \set contact_email 'test@example.com'
   \set contact_comment 'Test comment on contact.'
   -- set the notification interval in seconds
