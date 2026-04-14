@@ -27,16 +27,19 @@ Author(s):
 
 import sys
 import psycopg2
+import psycopg2.extras
 import argparse
 import collections
+from datetime import datetime, timezone
 
 import intelmq_certbund_contact.ripe.ripe_data as ripe_data
 
 
 SOURCE_NAME = 'ripe'
+BULK_PAGE_SIZE = 500
 
 
-def remove_old_entries(cur, verbose):
+def remove_old_entries(cur, verbose, delete_route_data=False):
     """Remove the entries imported by previous runs."""
     if verbose:
         print('** Removing old entries from database...')
@@ -49,6 +52,8 @@ def remove_old_entries(cur, verbose):
     cur.execute("DELETE FROM contact_automatic WHERE import_source = %s;",
                 (SOURCE_NAME,))
     cur.execute("DELETE FROM organisation_automatic WHERE import_source = %s;",
+                (SOURCE_NAME,))
+    cur.execute("DELETE FROM route_automatic WHERE import_source = %s;",
                 (SOURCE_NAME,))
 
 
@@ -124,25 +129,30 @@ def insert_new_organisations(cur, organisation_list, verbose):
 
     return mapping
 
-
-def insert_new_asn_org_entries(cur, asn_list, mapping):
-    # many-to-many table organisation <-> as number
+def _generate_asn_entries(asn_list, mapping):
+    insert_time = datetime.now(tz=timezone.utc)
     for entry in asn_list:
         org_id = mapping[entry["org"][0]].get("org_id")
         if org_id is None:
             print("org_id None for AS organisation handle {!r}"
                   .format(entry["org"][0]))
             continue
+        yield (org_id, entry['aut-num'][0][2:], SOURCE_NAME, insert_time)
 
-        cur.execute("""INSERT INTO organisation_to_asn_automatic
-                                   (organisation_automatic_id, asn,
-                                    import_source, import_time)
-                       VALUES (%s, %s, %s, CURRENT_TIMESTAMP);""",
-                    (org_id, entry['aut-num'][0][2:], SOURCE_NAME))
+def insert_new_asn_org_entries(cur, asn_list, mapping):
+    # many-to-many table organisation <-> as number
+    psycopg2.extras.execute_values(
+        cur,
+        """INSERT INTO organisation_to_asn_automatic
+                        (organisation_automatic_id, asn,
+                        import_source, import_time)
+            VALUES %s;""",
+        _generate_asn_entries(asn_list, mapping),
+        page_size=BULK_PAGE_SIZE,
+    )
 
-
-def insert_new_network_org_entries(cur, org_net_mapping, mapping):
-    # many-to-many table organisation <-> network number
+def _generate_network_entries(org_net_mapping, mapping):
+    insert_time = datetime.now(tz=timezone.utc)
     for org, networks in org_net_mapping.items():
         org_id = mapping[org].get("org_id")
         if org_id is None:
@@ -150,12 +160,20 @@ def insert_new_network_org_entries(cur, org_net_mapping, mapping):
             continue
 
         for network_id in networks:
-            cur.execute("""INSERT INTO organisation_to_network_automatic
-                                       (organisation_automatic_id,
-                                        network_automatic_id,
-                                        import_source, import_time)
-                            VALUES (%s, %s, %s, CURRENT_TIMESTAMP);""",
-                        (org_id, network_id, SOURCE_NAME))
+            yield (org_id, network_id, SOURCE_NAME, insert_time)
+
+def insert_new_network_org_entries(cur, org_net_mapping, mapping):
+    # many-to-many table organisation <-> network number
+    psycopg2.extras.execute_values(
+        cur,
+        """INSERT INTO organisation_to_network_automatic
+                       (organisation_automatic_id,
+                        network_automatic_id,
+                        import_source, import_time)
+            VALUES %s;""",
+        _generate_network_entries(org_net_mapping, mapping),
+        page_size=BULK_PAGE_SIZE,
+    )
 
 
 def insert_new_contact_entries(cur, role_list, abusec_to_org, mapping, verbose):
@@ -179,6 +197,30 @@ def insert_new_contact_entries(cur, role_list, abusec_to_org, mapping, verbose):
                             (email, mapping[orh]['org_id'], SOURCE_NAME))
 
 
+def insert_new_routes(cur, route_list, key, verbose):
+    if verbose:
+        print('** Saving {} data to database...'.format(key))
+
+    insert_time = datetime.now(tz=timezone.utc)
+
+    def _gen():
+        for entry in route_list:
+            # 'origin' is the ASN. Some values contain what appears to be
+            # comments (e.g. "origin: # AS1234 # FOO") them which we need to
+            # strip.
+            asn = entry['origin'][0].split()[0][2:]
+            yield (entry[key][0], asn, SOURCE_NAME, insert_time)
+
+    psycopg2.extras.execute_values(
+        cur,
+        """INSERT INTO route_automatic
+                (address, asn, import_source, import_time)
+            VALUES %s;""",
+        _gen(),
+        page_size=BULK_PAGE_SIZE,
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=""
@@ -189,6 +231,12 @@ def main():
 
     ripe_data.add_db_args(parser)
     ripe_data.add_common_args(parser)
+
+    parser.add_argument("--before-commit-command",
+                        help=("SQL statement that is executed before committing"
+                              " the changes. This can be used to e.g. cleanup"
+                              " data that refers to the potentially changed"
+                              " RIPE data."))
 
     args = parser.parse_args()
 
@@ -206,14 +254,14 @@ def main():
         print('------------------------')
 
     (asn_list, organisation_list, role_list, abusec_to_org, inetnum_list,
-     inet6num_list) = ripe_data.load_ripe_files(args)
+     inet6num_list, route_list, route6_list) = ripe_data.load_ripe_files(args)
 
     con = None
     try:
         con = psycopg2.connect(dsn=args.conninfo)
         cur = con.cursor()
 
-        remove_old_entries(cur, args.verbose)
+        remove_old_entries(cur, args.verbose, args.import_route_data)
 
         # network addresses
         org_inet6_mapping = insert_new_network_entries(
@@ -236,6 +284,20 @@ def main():
         #
         insert_new_contact_entries(cur, role_list, abusec_to_org, mapping,
                                    args.verbose)
+
+        #
+        # Routing
+        #
+        if args.import_route_data:
+            insert_new_routes(cur, route_list, 'route', args.verbose)
+            insert_new_routes(cur, route6_list, 'route6', args.verbose)
+
+        # run "before commit command"
+        if args.before_commit_command:
+            if args.verbose:
+                print('Running before commit command...')
+                print('------------------------')
+            cur.execute(args.before_commit_command)
 
         # Commit all data
         con.commit()

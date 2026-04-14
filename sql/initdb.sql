@@ -246,6 +246,23 @@ CREATE INDEX fqdn_annotation_fqdn_idx
           ON fqdn_annotation (fqdn_id);
 
 
+-- Routing information, useful as a mapping from network addresses to
+-- ASNs.
+CREATE TABLE route_automatic (
+    route_automatic_id SERIAL PRIMARY KEY,
+    address CIDR NOT NULL,
+    asn BIGINT NOT NULL,
+    LIKE automatic_templ INCLUDING ALL,
+
+    -- The data from ripe.db.route.gz and ripe.db.route6.gz has cases
+    -- where the same network address is associated with multiple ASNs,
+    -- so we cannot have a constraint on just (address, import_source).
+    UNIQUE (address, asn, import_source)
+);
+
+CREATE INDEX route_automatic_cidr_gist_idx ON route_automatic
+       USING gist (address inet_ops);
+
 
 -- Information about national CERTs
 
