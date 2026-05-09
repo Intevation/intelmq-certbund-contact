@@ -21,8 +21,6 @@ $$;
 
 BEGIN;
 
-SET ROLE contactdb_owner;
-
 /*
  Template table containing with elements for automatic tables
  */
@@ -38,6 +36,7 @@ CREATE TABLE IF NOT EXISTS sector (
   sector_id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL
 );
+ALTER TABLE sector OWNER TO contactdb_owner;
 
 /*
   Organisation and Contact
@@ -76,6 +75,7 @@ CREATE TABLE IF NOT EXISTS organisation (
 
     FOREIGN KEY (sector_id) REFERENCES sector(sector_id)
 );
+ALTER TABLE organisation OWNER TO contactdb_owner;
 
 
 CREATE TABLE IF NOT EXISTS organisation_automatic (
@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS organisation_automatic (
 
     FOREIGN KEY (sector_id) REFERENCES sector(sector_id)
 );
+ALTER TABLE organisation_automatic OWNER TO contactdb_owner;
 
 
 CREATE TABLE IF NOT EXISTS organisation_annotation (
@@ -94,6 +95,7 @@ CREATE TABLE IF NOT EXISTS organisation_annotation (
 
     FOREIGN KEY (organisation_id) REFERENCES organisation(organisation_id)
 );
+ALTER TABLE organisation_annotation OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS organisation_annotation_organisation_idx
           ON organisation_annotation (organisation_id);
@@ -124,6 +126,7 @@ CREATE TABLE IF NOT EXISTS contact (
 
     FOREIGN KEY (organisation_id) REFERENCES organisation (organisation_id)
 );
+ALTER TABLE contact OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS contact_organisation_idx ON contact (organisation_id);
 
@@ -137,6 +140,7 @@ CREATE TABLE IF NOT EXISTS contact_automatic (
     FOREIGN KEY (organisation_automatic_id)
      REFERENCES organisation_automatic (organisation_automatic_id)
 );
+ALTER TABLE contact_automatic OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS contact_automatic_organisation_idx
           ON contact_automatic (organisation_automatic_id);
@@ -152,6 +156,7 @@ CREATE TABLE IF NOT EXISTS autonomous_system_annotation (
     asn BIGINT NOT NULL,
     annotation JSONB NOT NULL
 );
+ALTER TABLE autonomous_system_annotation OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS autonomous_system_annotation_asn_idx
           ON autonomous_system_annotation (asn);
@@ -171,6 +176,7 @@ CREATE TABLE IF NOT EXISTS network (
     network_id SERIAL PRIMARY KEY,
     LIKE network_templ INCLUDING ALL
 );
+ALTER TABLE network OWNER TO contactdb_owner;
 
 CREATE TABLE IF NOT EXISTS network_automatic (
     network_automatic_id SERIAL PRIMARY KEY,
@@ -179,6 +185,7 @@ CREATE TABLE IF NOT EXISTS network_automatic (
 
     UNIQUE (address, import_source)
 );
+ALTER TABLE network_automatic OWNER TO contactdb_owner;
 
 
 -- Indexes on the cidr column to improve queries that look up a network
@@ -224,6 +231,7 @@ CREATE TABLE IF NOT EXISTS network_annotation (
 
     FOREIGN KEY (network_id) REFERENCES network(network_id)
 );
+ALTER TABLE network_annotation OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS network_annotation_network_idx
           ON network_annotation (network_id);
@@ -244,6 +252,7 @@ CREATE TABLE IF NOT EXISTS fqdn (
     fqdn_id SERIAL PRIMARY KEY,
     LIKE fqdn_templ INCLUDING ALL
 );
+ALTER TABLE fqdn OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS fqdn_fqdn_idx ON fqdn (fqdn);
 
@@ -255,6 +264,7 @@ CREATE TABLE IF NOT EXISTS fqdn_automatic (
 
     UNIQUE (fqdn, import_source)
 );
+ALTER TABLE fqdn_automatic OWNER TO contactdb_owner;
 
 
 CREATE TABLE IF NOT EXISTS fqdn_annotation (
@@ -264,6 +274,7 @@ CREATE TABLE IF NOT EXISTS fqdn_annotation (
 
     FOREIGN KEY (fqdn_id) REFERENCES fqdn(fqdn_id)
 );
+ALTER TABLE fqdn_annotation OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS fqdn_annotation_fqdn_idx
           ON fqdn_annotation (fqdn_id);
@@ -291,6 +302,7 @@ CREATE TABLE IF NOT EXISTS national_cert (
 
     FOREIGN KEY (organisation_id) REFERENCES organisation (organisation_id)
 );
+ALTER TABLE national_cert OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS national_cert_country_code_idx
           ON national_cert (country_code);
@@ -308,6 +320,7 @@ CREATE TABLE IF NOT EXISTS national_cert_automatic (
     FOREIGN KEY (organisation_automatic_id)
      REFERENCES organisation_automatic (organisation_automatic_id)
 );
+ALTER TABLE national_cert_automatic OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS national_cert_automatic_country_code_idx
           ON national_cert_automatic (country_code);
@@ -326,6 +339,7 @@ CREATE TABLE IF NOT EXISTS organisation_to_asn (
 
     FOREIGN KEY (organisation_id) REFERENCES organisation (organisation_id)
 );
+ALTER TABLE organisation_to_asn OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS organisation_to_asn_asn_idx
     ON organisation_to_asn (asn);
@@ -340,6 +354,7 @@ CREATE TABLE IF NOT EXISTS organisation_to_asn_automatic (
     FOREIGN KEY (organisation_automatic_id)
      REFERENCES organisation_automatic (organisation_automatic_id)
 );
+ALTER TABLE organisation_to_asn_automatic OWNER TO contactdb_owner;
 
 CREATE INDEX IF NOT EXISTS organisation_to_asn_automatic_asn_idx
     ON organisation_to_asn_automatic (asn);
@@ -354,6 +369,7 @@ CREATE TABLE IF NOT EXISTS organisation_to_network (
     FOREIGN KEY (organisation_id) REFERENCES organisation (organisation_id),
     FOREIGN KEY (network_id) REFERENCES network (network_id)
 );
+ALTER TABLE organisation_to_network OWNER TO contactdb_owner;
 
 CREATE TABLE IF NOT EXISTS organisation_to_network_automatic (
     organisation_automatic_id INTEGER,
@@ -367,6 +383,7 @@ CREATE TABLE IF NOT EXISTS organisation_to_network_automatic (
     FOREIGN KEY (network_automatic_id)
      REFERENCES network_automatic (network_automatic_id)
 );
+ALTER TABLE organisation_to_network_automatic OWNER TO contactdb_owner;
 
 
 CREATE TABLE IF NOT EXISTS organisation_to_fqdn (
@@ -378,6 +395,7 @@ CREATE TABLE IF NOT EXISTS organisation_to_fqdn (
     FOREIGN KEY (organisation_id) REFERENCES organisation (organisation_id),
     FOREIGN KEY (fqdn_id) REFERENCES fqdn (fqdn_id)
 );
+ALTER TABLE organisation_to_fqdn OWNER TO contactdb_owner;
 
 CREATE TABLE IF NOT EXISTS organisation_to_fqdn_automatic (
     organisation_automatic_id INTEGER,
@@ -391,6 +409,7 @@ CREATE TABLE IF NOT EXISTS organisation_to_fqdn_automatic (
     FOREIGN KEY (fqdn_automatic_id)
      REFERENCES fqdn_automatic (fqdn_automatic_id)
 );
+ALTER TABLE organisation_to_fqdn_automatic OWNER TO contactdb_owner;
 
 
 
@@ -402,6 +421,7 @@ CREATE TABLE IF NOT EXISTS email_status (
     enabled BOOLEAN NOT NULL,
     added TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+ALTER TABLE email_status OWNER TO contactdb_owner;
 
 
 -- Tags for email addresses. These apply to any email address, including
@@ -414,6 +434,7 @@ CREATE TABLE IF NOT EXISTS tag_name (
 
     UNIQUE (tag_name)
 );
+ALTER TABLE tag_name OWNER TO contactdb_owner;
 
 CREATE TABLE IF NOT EXISTS tag (
     tag_id SERIAL PRIMARY KEY,
@@ -425,6 +446,7 @@ CREATE TABLE IF NOT EXISTS tag (
     UNIQUE (tag_name_id, tag_value),
     FOREIGN KEY (tag_name_id) REFERENCES tag_name (tag_name_id)
 );
+ALTER TABLE tag OWNER TO contactdb_owner;
 
 -- Unique index to ensure that for each tag_name, there's at most one
 -- tag marked as default.
@@ -441,6 +463,7 @@ CREATE TABLE IF NOT EXISTS email_tag (
 
     FOREIGN KEY (tag_id) REFERENCES tag (tag_id)
 );
+ALTER TABLE email_tag OWNER TO contactdb_owner;
 
 
 CREATE INDEX IF NOT EXISTS email_tag_email_idx
@@ -455,6 +478,7 @@ CREATE OR REPLACE VIEW email_annotation (email, annotation)
        FROM email_tag
        JOIN tag USING (tag_id)
        JOIN tag_name USING (tag_name_id);
+ALTER VIEW email_annotation OWNER TO contactdb_owner;
 
 
 CREATE OR REPLACE FUNCTION email_annotations(email_address VARCHAR(100))
@@ -493,6 +517,7 @@ SELECT json_agg(COALESCE(annotation, default_annotation))
 RETURN coalesce(annotations, '[]'::JSONB);
 END;
 $$ LANGUAGE plpgsql STABLE;
+ALTER FUNCTION email_annotations(VARCHAR(100)) OWNER TO contactdb_owner;
 
 
 -- Audit log table for all changes made in fody or other scripts changing the database
@@ -507,6 +532,7 @@ CREATE TABLE IF NOT EXISTS audit_log (
     "before" JSONB,
     "after" JSONB
 );
+ALTER TABLE audit_log OWNER TO contactdb_owner;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO contactdb_rw;
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO contactdb_rw;

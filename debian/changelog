@@ -40,8 +40,9 @@ intelmq-certbund-contact (1.2.0-1) UNRELEASED; urgency=medium
     * Add repr methods to Organisation and Contact classes
   * packages:
     * include example rules in documentation (#31)
-  * database:
-    * support for upgrades in the initialisation SQL file (#35).
+  * database (initialisation SQL file):
+    * add re-run/idempotency support (#35).
+    * Add ownership statements (#39).
 
  -- Sebastian Wagner <swagner@intevation.de>  Wed, 05 Mar 2025 14:29:32 +0100
 
